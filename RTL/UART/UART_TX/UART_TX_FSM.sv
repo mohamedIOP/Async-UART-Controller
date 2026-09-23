@@ -45,7 +45,7 @@ module UART_TX_FSM (
             start: nextState = data;
             data: nextState = (serDone) ? (parEn ? parity : stop) : data;
             parity: nextState = stop;
-            stop: nextState = (dataValid) ? start : idle;
+            stop: nextState = idle;
             default : nextState = idle;
         endcase
     end
