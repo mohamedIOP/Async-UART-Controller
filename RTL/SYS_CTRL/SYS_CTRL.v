@@ -29,7 +29,7 @@ module SYS_CTRL (
     output reg         EN,
 
     // Clock gate for the ALU
-    output wire         CLK_EN,
+    output reg         CLK_EN,
 
     // RegFile interface
     output reg  [3:0]  Address,
@@ -52,8 +52,7 @@ module SYS_CTRL (
     output wire        clk_div_en
 );
 
-    // ALU clock is always enabled; divider is free-running per spec.
-    assign CLK_EN     = 1'b1;
+    // divider is free-running per spec.
     assign clk_div_en = 1'b1;
 
     // Opcodes
@@ -81,7 +80,6 @@ module SYS_CTRL (
     reg [3:0] state, next_state;
     reg [7:0] cmd_reg;
     reg [7:0] frame1_reg, frame2_reg, frame3_reg;
-
     always @(posedge CLK or negedge RST) begin
         if (!RST)
             state <= S_IDLE;
@@ -118,7 +116,7 @@ module SYS_CTRL (
         EN         = 1'b0;
         TX_D_VLD   = 1'b0;
         TX_P_DATA  = 8'b0;
-
+        CLK_EN     = 'b0;
         case (state)
             S_IDLE: begin
                 if (RX_D_VLD)
@@ -152,11 +150,11 @@ module SYS_CTRL (
                     next_state = S_ALU_WR_A;                  // stage operand A into RegFile first
             end
 
-            // ---- RF_Wr_CMD: frame1 = data, frame2 = addr ----
+            // ---- RF_Wr_CMD: frame2 = data, frame1 = addr ----
             S_RF_WRITE: begin
                 WrEn    = 1'b1;
-                Address = frame2_reg[3:0];
-                WrData  = frame1_reg;
+                Address = frame1_reg[3:0];
+                WrData  = frame2_reg;
                 next_state = S_IDLE;
             end
 
@@ -191,19 +189,23 @@ module SYS_CTRL (
                 WrEn    = 1'b1;
                 Address = 4'h1;          // REG1 = Operand B
                 WrData  = frame2_reg;
+                CLK_EN = 1;
                 next_state = S_ALU_EXEC;
             end
 
             S_ALU_EXEC: begin
                 EN = 1'b1;
+                CLK_EN = 1;
                 // frame3 holds ALU_FUN for the WITH-operand command;
                 // frame1 holds it for the NO-operand command.
                 ALU_FUN = (cmd_reg == CMD_ALU_OP) ? frame3_reg[3:0] : frame1_reg[3:0];
                 next_state = S_ALU_WAIT;
             end
             S_ALU_WAIT: begin
-                if (OUT_Valid)
+                if (OUT_Valid) begin
                     next_state = S_ALU_SEND;
+                    CLK_EN = 0;
+                end
             end
             S_ALU_SEND: begin
                 if (!FIFO_FULL) begin
