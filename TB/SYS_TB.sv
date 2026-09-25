@@ -33,6 +33,8 @@ module SYS_TOP_tb;
     reg  RST;
     reg  RX_IN;
     wire TX_OUT;
+    wire RF_PAR_ERR; // Added to fix 7-port warning
+    wire RF_STP_ERR; // Added to fix 7-port warning
 
     // Testbench Control & Synchronization Signals
     event start_test_trigger;
@@ -45,7 +47,7 @@ module SYS_TOP_tb;
     integer total_tc  = 0;
     integer passed_tc = 0;
     integer failed_tc = 0;
-    integer failed_cases_list[$]; // Queue to store IDs of failed cases
+    integer failed_cases_list[$];
 
     // Time tracking variables
     time tc_start_time;
@@ -56,14 +58,16 @@ module SYS_TOP_tb;
     reg [7:0] expected_bytes [0:1];
 
     // =========================================================================
-    // 3. DUT Instantiation
+    // 3. DUT Instantiation (Updated to match all 7 ports of SYS_TOP)
     // =========================================================================
     SYS_TOP DUT (
-        .REF_CLK  (REF_CLK),
-        .UART_CLK (UART_CLK),
-        .RST      (RST),
-        .RX_IN    (RX_IN),
-        .TX_OUT   (TX_OUT)
+        .REF_CLK    (REF_CLK),
+        .UART_CLK   (UART_CLK),
+        .RST        (RST),
+        .RX_IN      (RX_IN),
+        .TX_OUT     (TX_OUT),
+        .RF_PAR_ERR (RF_PAR_ERR),
+        .RF_STP_ERR (RF_STP_ERR)
     );
 
     // =========================================================================
@@ -75,7 +79,6 @@ module SYS_TOP_tb;
     // =========================================================================
     // 5. Helper Tasks (UART Frame Drive)
     // =========================================================================
-    // Task to send 1 UART Frame (Start + 8 Data Bits + Even Parity + Stop Bit)
     task send_uart_frame(input [7:0] data_in);
         integer i;
         reg parity_bit;
@@ -123,31 +126,22 @@ module SYS_TOP_tb;
         $display("          STARTING SYSTEM TESTBENCH EXECUTION            ");
         $display("=========================================================\n");
 
-        // ---------------------------------------------------------------------
         // CONFIGURATION PHASE: Address 0x02 and 0x03
-        // ---------------------------------------------------------------------
-        // Config Register 0x02: Parity Enable = 1, Parity Type = 0 (Even), Prescale = 32 (0x20) -> Data = 8'b1000_0001 (0x81)
-        // Config Register 0x03: Div Ratio = 32 (0x20)
-        
-        // Write Config Reg 0x02
         send_uart_frame(WR_CMD);
         send_uart_frame(8'h02);
         send_uart_frame(8'h81);
         #(BIT_PERIOD * 2);
 
-        // Write Config Reg 0x03
         send_uart_frame(WR_CMD);
-        send_uart_frame(8'h03);
+        send_uart_frame(8 'h03);
         send_uart_frame(8'h20);
         #(BIT_PERIOD * 2);
 
-        // ---------------------------------------------------------------------
-        // TEST CASE 1: RegFile Write Operation
-        // ---------------------------------------------------------------------
+        // TEST CASE 1: RegFile Write
         total_tc     = total_tc + 1;
         test_case_id = 1;
         test_label   = "RegFile Write Operation [Write 0x55 to Addr 0x05]";
-        expected_num_bytes = 0; // No response expected on UART_TX
+        expected_num_bytes = 0;
 
         tc_start_time = $time;
         -> start_test_trigger;
@@ -158,9 +152,7 @@ module SYS_TOP_tb;
 
         @ (test_done);
 
-        // ---------------------------------------------------------------------
-        // TEST CASE 2: RegFile Read Operation
-        // ---------------------------------------------------------------------
+        // TEST CASE 2: RegFile Read
         total_tc     = total_tc + 1;
         test_case_id = 2;
         test_label   = "RegFile Read Operation [Read Addr 0x05, Expected: 0x55]";
@@ -175,9 +167,7 @@ module SYS_TOP_tb;
 
         @ (test_done);
 
-        // ---------------------------------------------------------------------
         // TEST CASE 3: ALU Operation with Operand (Addition)
-        // ---------------------------------------------------------------------
         total_tc     = total_tc + 1;
         test_case_id = 3;
         test_label   = "ALU Op with Operand [ADD: OperA=0x20, OperB=0x05 -> Exp: 0x0025]";
@@ -189,15 +179,13 @@ module SYS_TOP_tb;
         -> start_test_trigger;
 
         send_uart_frame(ALU_W_OP_CMD);
-        send_uart_frame(8'h20); // Operand A
-        send_uart_frame(8'h05); // Operand B
-        send_uart_frame({4'b0000, ALU_ADD}); // Addition FUN
+        send_uart_frame(8'h20);
+        send_uart_frame(8'h05);
+        send_uart_frame({4'b0000, ALU_ADD});
 
         @ (test_done);
 
-        // ---------------------------------------------------------------------
-        // TEST CASE 4: ALU Operation with No Operand (Subtraction on prior operands)
-        // ---------------------------------------------------------------------
+        // TEST CASE 4: ALU Operation with No Operand (Subtraction)
         total_tc     = total_tc + 1;
         test_case_id = 4;
         test_label   = "ALU Op w/ No Operand [SUB: 0x20 - 0x05 -> Exp: 0x001B]";
@@ -209,13 +197,11 @@ module SYS_TOP_tb;
         -> start_test_trigger;
 
         send_uart_frame(ALU_NOP_CMD);
-        send_uart_frame({4'b0000, ALU_SUB}); // Subtraction FUN
+        send_uart_frame({4'b0000, ALU_SUB});
 
         @ (test_done);
 
-        // ---------------------------------------------------------------------
         // TEST CASE 5: ALU Operation with Operand (Multiplication)
-        // ---------------------------------------------------------------------
         total_tc     = total_tc + 1;
         test_case_id = 5;
         test_label   = "ALU Op with Operand [MUL: OperA=0x12, OperB=0x10 -> Exp: 0x0120]";
@@ -227,18 +213,15 @@ module SYS_TOP_tb;
         -> start_test_trigger;
 
         send_uart_frame(ALU_W_OP_CMD);
-        send_uart_frame(8'h12); // Operand A
-        send_uart_frame(8'h10); // Operand B
-        send_uart_frame({4'b0000, ALU_MUL}); // Multiplication FUN
+        send_uart_frame(8'h12);
+        send_uart_frame(8'h10);
+        send_uart_frame({4'b0000, ALU_MUL});
 
         @ (test_done);
 
-        // Allow final transmission stabilization
         #(BIT_PERIOD * 10);
 
-        // ---------------------------------------------------------------------
-        // FINAL SUMMARY DISPLAY
-        // ---------------------------------------------------------------------
+        // SUMMARY DISPLAY
         $display("\n=========================================================");
         $display("                   TESTBENCH SUMMARY                     ");
         $display("=========================================================");
@@ -261,7 +244,7 @@ module SYS_TOP_tb;
     end
 
     // =========================================================================
-    // 7. INITIAL BLOCK 2: READING THREAD (Monitor, Receiver & Self-Checker)
+    // 7. INITIAL BLOCK 2: READING THREAD (Monitor & Self-Checker)
     // =========================================================================
     initial begin
         reg [7:0] rx_byte;
@@ -277,23 +260,17 @@ module SYS_TOP_tb;
 
             if (expected_num_bytes > 0) begin
                 for (b = 0; b < expected_num_bytes; b = b + 1) begin
-                    // Wait for Start Bit (Falling Edge on TX_OUT)
                     @ (negedge TX_OUT);
-                    
-                    // Delay to middle of Start Bit
                     #(BIT_PERIOD / 2.0);
 
-                    // Sample 8 Data Bits
                     rx_byte = 8'h00;
                     for (bit_idx = 0; bit_idx < 8; bit_idx = bit_idx + 1) begin
                         #(BIT_PERIOD);
                         rx_byte[bit_idx] = TX_OUT;
                     end
 
-                    // Skip Parity and Stop bits sampling delay
                     #(BIT_PERIOD * 2);
 
-                    // Verify Byte Output
                     if (rx_byte !== expected_bytes[b]) begin
                         $display("  [ERROR] Byte %0d Mismatch! Received: 0x%0h | Expected: 0x%0h", 
                                  b, rx_byte, expected_bytes[b]);
@@ -303,18 +280,16 @@ module SYS_TOP_tb;
                     end
                 end
             end else begin
-                // Wait for Write Operation to execute internal logic
                 #(BIT_PERIOD * 5);
             end
 
             tc_end_time = $time;
             $display("TC#%0d End Time  : %0t ns", test_case_id, tc_end_time);
 
-            // Display key inner signals for debug visibility
+            // FIX: Corrected internal signals path according to SYS_TOP.v and RegFile.v
             $display("  [INNER SIGNALS] ALU_OUT: 0x%0h | RegFile[0x05]: 0x%0h", 
-                     DUT.ALU_U0.ALU_OUT, DUT.RegFile_U0.RegFile[5]);
+                     DUT.U_ALU.ALU_OUT, DUT.U_RegFile.regArr[5]);
 
-            // Final Verdict Evaluation
             if (tc_passed) begin
                 $display("TC#%0d VERDICT   : PASSED", test_case_id);
                 passed_tc = passed_tc + 1;
