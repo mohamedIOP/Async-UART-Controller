@@ -9,7 +9,9 @@ input      CLK,
 output     GATED_CLK
 );
 
-/*
+
+// TB Version
+
 
 //internal connections
 reg     Latch_Out ;
@@ -27,16 +29,17 @@ always @(CLK or CLK_EN)
 // ANDING
 assign  GATED_CLK = CLK && Latch_Out ;
 
-*/
 
 
 
+// Synthesis Version
+/*
 TLATNCAX12M U0_TLATNCAX12M (
 .E(CLK_EN),
 .CK(CLK),
 .ECK(GATED_CLK)
 );
-
+*/
 
 
 
