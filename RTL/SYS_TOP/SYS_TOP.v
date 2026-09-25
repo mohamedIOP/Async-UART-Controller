@@ -1,0 +1,230 @@
+/////////////////////////////////////////////////////////////
+////////////////////////  SYS_TOP  /////////////////////////
+/////////////////////////////////////////////////////////////
+// Top-level integration, wired exactly per Final_System.pdf:
+//   Clock Domain 1 (REF_CLK) : RegFile, ALU, Clock Gating, SYS_CTRL
+//   Clock Domain 2 (UART_CLK): UART_TX, UART_RX, PULSE_GEN, 2x Clock Divider
+//   Crossings                : RST_SYNC x2, Data_Synchronizer x2, ASYNC_FIFO
+/////////////////////////////////////////////////////////////
+
+module SYS_TOP #(
+    parameter RF_WIDTH   = 8,
+    parameter RF_DEPTH   = 16,
+    parameter RF_ADDR    = 4,
+    parameter FIFO_WIDTH = 8
+)(
+    input  wire        REF_CLK,     // 50 MHz
+    input  wire        UART_CLK,    // 3.6864 MHz
+    input  wire        RST,         // active-low async top reset
+    input  wire        RX_IN,
+    output wire        TX_OUT,
+    output wire        RF_PAR_ERR,
+    output wire        RF_STP_ERR
+);
+
+    //=========================================================
+    // Reset synchronizers - one per clock domain
+    //=========================================================
+    wire SYNC_RST_1; // REF_CLK domain
+    wire SYNC_RST_2; // UART_CLK domain
+
+    RST_SYNC RST_SYNC_1 (
+        .CLK (REF_CLK),
+        .RST (RST),
+        .SYNC_RST (SYNC_RST_1)
+    );
+
+    RST_SYNC RST_SYNC_2 (
+        .CLK (UART_CLK),
+        .RST (RST),
+        .SYNC_RST (SYNC_RST_2)
+    );
+
+    //=========================================================
+    // Clock Domain 1 (REF_CLK): RegFile, ALU, Clock Gating, SYS_CTRL
+    //=========================================================
+    wire [RF_WIDTH-1:0] REG0, REG1, REG2, REG3;
+    wire [RF_ADDR-1:0]  RF_Address;
+    wire                RF_WrEn, RF_RdEn;
+    wire [RF_WIDTH-1:0] RF_WrData, RF_RdData;
+    wire                RF_RdData_Valid;
+
+    RegFile #(.WIDTH(RF_WIDTH), .DEPTH(RF_DEPTH), .ADDR(RF_ADDR)) U_RegFile (
+        .CLK        (REF_CLK),
+        .RST        (SYNC_RST_1),
+        .WrEn       (RF_WrEn),
+        .RdEn       (RF_RdEn),
+        .Address    (RF_Address),
+        .WrData     (RF_WrData),
+        .RdData     (RF_RdData),
+        .RdData_VLD (RF_RdData_Valid),
+        .REG0       (REG0),
+        .REG1       (REG1),
+        .REG2       (REG2),
+        .REG3       (REG3)
+    );
+
+    wire ALU_CLK_EN, ALU_GATED_CLK;
+
+    CLK_GATE U_CLK_GATE (
+        .CLK_EN     (ALU_CLK_EN),
+        .CLK        (REF_CLK),
+        .GATED_CLK  (ALU_GATED_CLK)
+    );
+
+    wire [15:0] ALU_OUT;
+    wire        ALU_OUT_VALID;
+    wire [3:0]  ALU_FUN;
+    wire        ALU_EN;
+
+    ALU U_ALU (
+        .A          ({{8{1'b0}}, REG0}),
+        .B          ({{8{1'b0}}, REG1}),
+        .ALU_FUN    (ALU_FUN),
+        .CLK        (ALU_GATED_CLK),
+        .RST        (SYNC_RST_1),
+        .EN         (ALU_EN),
+        .ALU_OUT    (ALU_OUT),
+        .OUT_VALID  (ALU_OUT_VALID),
+        .Carry_Flag (),
+        .Arith_Flag (),
+        .Logic_Flag (),
+        .CMP_Flag   (),
+        .Shift_Flag ()
+    );
+
+    // ---- RX path into SYS_CTRL (Data_Sync crosses UART_CLK -> REF_CLK) ----
+    wire [7:0] RX_P_DATA_sync;
+    wire       RX_D_VLD_sync;
+
+    // ---- TX path out of SYS_CTRL, into ASYNC_FIFO (REF_CLK -> UART_CLK) ----
+    wire [7:0] SYS_TX_P_DATA;
+    wire       SYS_TX_D_VLD;
+    wire       FIFO_FULL, FIFO_EMPTY;
+
+    wire       clk_div_en_unused;
+
+    SYS_CTRL U_SYS_CTRL (
+        .CLK          (REF_CLK),
+        .RST          (SYNC_RST_1),
+        .ALU_OUT      (ALU_OUT),
+        .OUT_Valid    (ALU_OUT_VALID),
+        .ALU_FUN      (ALU_FUN),
+        .EN           (ALU_EN),
+        .CLK_EN       (ALU_CLK_EN),
+        .Address      (RF_Address),
+        .WrEn         (RF_WrEn),
+        .RdEn         (RF_RdEn),
+        .WrData       (RF_WrData),
+        .RdData       (RF_RdData),
+        .RdData_Valid (RF_RdData_Valid),
+        .RX_P_DATA    (RX_P_DATA_sync),
+        .RX_D_VLD     (RX_D_VLD_sync),
+        .TX_P_DATA    (SYS_TX_P_DATA),
+        .TX_D_VLD     (SYS_TX_D_VLD),
+        .FIFO_FULL    (FIFO_FULL),
+        .clk_div_en   (clk_div_en_unused)
+    );
+
+    //=========================================================
+    // Clock Domain 2 (UART_CLK): Clock Dividers, UART, PULSE_GEN
+    //=========================================================
+    wire RX_CLK, TX_CLK;
+
+    ClkDiv U_ClkDiv_RX (
+        .i_ref_clk   (UART_CLK),
+        .i_rst_n     (SYNC_RST_2),
+        .i_clk_en    (1'b1),          // divider is always on, per spec
+        .i_div_ratio (REG3),
+        .o_div_clk   (RX_CLK)
+    );
+
+    ClkDiv U_ClkDiv_TX (
+        .i_ref_clk   (UART_CLK),
+        .i_rst_n     (SYNC_RST_2),
+        .i_clk_en    (1'b1),
+        .i_div_ratio (REG3),
+        .o_div_clk   (TX_CLK)
+    );
+
+    wire [7:0] UART_RX_P_DATA;
+    wire       UART_RX_D_VLD;
+    wire       UART_TX_BUSY;
+
+    UART U_UART (
+        .RST            (SYNC_RST_2),
+        .TX_CLK         (TX_CLK),
+        .RX_CLK         (RX_CLK),
+        .RX_IN_S        (RX_IN),
+        .RX_OUT_P       (UART_RX_P_DATA),
+        .RX_OUT_V       (UART_RX_D_VLD),
+        .TX_IN_P        (FIFO_RD_DATA),
+        .TX_IN_V        (~FIFO_EMPTY),
+        .TX_OUT_S       (TX_OUT),
+        .TX_OUT_V       (UART_TX_BUSY),
+        .Prescale       (UART_Prescale),
+        .parity_enable  (UART_PAR_EN),
+        .parity_type    (UART_PAR_TYP),
+        .parity_error   (RF_PAR_ERR),
+        .framing_error  (RF_STP_ERR)
+    );
+
+    wire FIFO_R_INC;
+
+    PULSE_GEN U_PULSE_GEN (
+        .clk       (TX_CLK),
+        .rst       (SYNC_RST_2),
+        .lvl_sig   (UART_TX_BUSY),
+        .pulse_sig (FIFO_R_INC)
+    );
+
+    //=========================================================
+    // Crossing: REG2 (UART config) -> Data_Sync -> UART_CLK domain
+    //=========================================================
+    wire [7:0] UART_CFG_sync;
+    wire       UART_CFG_pulse;
+
+    DATA_SYNC U_Data_Sync_CFG (
+        .unsync_bus   (REG2),
+        .bus_enable   (1'b1),
+        .CLK          (UART_CLK),
+        .RST          (SYNC_RST_2),
+        .sync_bus     (UART_CFG_sync),
+        .enable_pulse ()
+    );
+
+    wire        UART_PAR_EN  = UART_CFG_sync[0];
+    wire        UART_PAR_TYP = UART_CFG_sync[1];
+    wire [5:0]  UART_Prescale = UART_CFG_sync[7:2];
+
+    //=========================================================
+    // Crossing: UART_RX data -> Data_Sync -> REF_CLK domain -> SYS_CTRL
+    //=========================================================
+    DATA_SYNC U_Data_Sync_RX (
+        .unsync_bus   (UART_RX_P_DATA),
+        .bus_enable   (UART_RX_D_VLD),
+        .CLK          (REF_CLK),
+        .RST          (SYNC_RST_1),
+        .sync_bus     (RX_P_DATA_sync),
+        .enable_pulse (RX_D_VLD_sync)
+    );
+
+    //=========================================================
+    // Crossing: SYS_CTRL result byte -> ASYNC_FIFO -> UART_TX
+    //=========================================================
+    wire [7:0] FIFO_RD_DATA;
+
+    ASYNC_FIFO #(.DATA_WIDTH(FIFO_WIDTH)) U_ASYNC_FIFO (
+        .W_CLK   (REF_CLK),
+        .W_RST   (SYNC_RST_1),
+        .W_INC   (SYS_TX_D_VLD),
+        .R_CLK   (TX_CLK),
+        .R_RST   (SYNC_RST_2),
+        .R_INC   (FIFO_R_INC),
+        .WR_DATA (SYS_TX_P_DATA),
+        .FULL    (FIFO_FULL),
+        .EMPTY   (FIFO_EMPTY),
+        .RD_DATA (FIFO_RD_DATA)
+    );
+
+endmodule //SYS_TOP
