@@ -131,11 +131,22 @@ module SYS_TOP #(
     //=========================================================
     wire RX_CLK, TX_CLK;
 
+    // Decode the 6-bit Prescale field (REG2[7:2], synced into this domain
+    // as UART_Prescale below) into the RX divider's ratio. Keeps
+    // prescale_raw * RX_div_ratio constant (=32) across all four legal
+    // one-hot settings, so RX always ends up baud-matched to TX.
+    wire [7:0] RX_div_ratio;
+
+    CLKDIV_MUX #(.WIDTH(8)) U_CLKDIV_MUX (
+        .IN  (UART_Prescale),
+        .OUT (RX_div_ratio)
+    );
+
     ClkDiv U_ClkDiv_RX (
         .i_ref_clk   (UART_CLK),
         .i_rst_n     (SYNC_RST_2),
         .i_clk_en    (1'b1),          // divider is always on, per spec
-        .i_div_ratio (REG3),
+        .i_div_ratio (RX_div_ratio),
         .o_div_clk   (RX_CLK)
     );
 
@@ -179,23 +190,15 @@ module SYS_TOP #(
     );
 
     //=========================================================
-    // Crossing: REG2 (UART config) -> Data_Sync -> UART_CLK domain
+    // REG2 (UART config: parity enable/type + Prescale) is written
+    // once during initial configuration, before any UART traffic
+    // starts, and held static afterward - so it's connected directly
+    // into the UART_CLK domain, same as REG3/Div_Ratio already is.
+    // No Data_Sync needed for a signal that isn't toggling.
     //=========================================================
-    wire [7:0] UART_CFG_sync;
-    wire       UART_CFG_pulse;
-
-    DATA_SYNC U_Data_Sync_CFG (
-        .unsync_bus   (REG2),
-        .bus_enable   (1'b1),
-        .CLK          (UART_CLK),
-        .RST          (SYNC_RST_2),
-        .sync_bus     (UART_CFG_sync),
-        .enable_pulse ()
-    );
-
-    wire        UART_PAR_EN  = UART_CFG_sync[0];
-    wire        UART_PAR_TYP = UART_CFG_sync[1];
-    wire [5:0]  UART_Prescale = UART_CFG_sync[7:2];
+    wire        UART_PAR_EN  = REG2[0];
+    wire        UART_PAR_TYP = REG2[1];
+    wire [5:0]  UART_Prescale = REG2[7:2];
 
     //=========================================================
     // Crossing: UART_RX data -> Data_Sync -> REF_CLK domain -> SYS_CTRL
