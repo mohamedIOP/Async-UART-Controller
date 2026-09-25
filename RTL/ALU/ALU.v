@@ -1,14 +1,14 @@
 module ALU(
     input [15:0] A,B,
     input [3:0] ALU_FUN,
-    input CLK,RST
+    input CLK,RST,
     input EN,
     output reg [15:0] ALU_OUT,
     output reg OUT_VALID,
     output reg Carry_Flag,
     output Arith_Flag,Logic_Flag,CMP_Flag,Shift_Flag
 );
-    reg [15:0] ALU_OUT_Comb <= 'b0;
+    reg [15:0] ALU_OUT_Comb;
     reg OUT_VALID_Comb;
 
     assign  Arith_Flag = (!ALU_FUN[2] && !ALU_FUN[3]),

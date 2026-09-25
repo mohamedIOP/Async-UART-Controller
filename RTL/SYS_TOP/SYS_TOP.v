@@ -137,6 +137,18 @@ module SYS_TOP #(
     // one-hot settings, so RX always ends up baud-matched to TX.
     wire [7:0] RX_div_ratio;
 
+    //=========================================================
+    // REG2 (UART config: parity enable/type + Prescale) is written
+    // once during initial configuration, before any UART traffic
+    // starts, and held static afterward - so it's connected directly
+    // into the UART_CLK domain, same as REG3/Div_Ratio already is.
+    // No Data_Sync needed for a signal that isn't toggling.
+    //=========================================================
+    wire        UART_PAR_EN  = REG2[0];
+    wire        UART_PAR_TYP = REG2[1];
+    wire [5:0]  UART_Prescale = REG2[7:2];
+
+
     CLKDIV_MUX #(.WIDTH(8)) U_CLKDIV_MUX (
         .IN  (UART_Prescale),
         .OUT (RX_div_ratio)
@@ -161,6 +173,8 @@ module SYS_TOP #(
     wire [7:0] UART_RX_P_DATA;
     wire       UART_RX_D_VLD;
     wire       UART_TX_BUSY;
+    wire [7:0] FIFO_RD_DATA; //FIFO Intermediate Signal
+
 
     UART U_UART (
         .RST            (SYNC_RST_2),
@@ -189,16 +203,7 @@ module SYS_TOP #(
         .pulse_sig (FIFO_R_INC)
     );
 
-    //=========================================================
-    // REG2 (UART config: parity enable/type + Prescale) is written
-    // once during initial configuration, before any UART traffic
-    // starts, and held static afterward - so it's connected directly
-    // into the UART_CLK domain, same as REG3/Div_Ratio already is.
-    // No Data_Sync needed for a signal that isn't toggling.
-    //=========================================================
-    wire        UART_PAR_EN  = REG2[0];
-    wire        UART_PAR_TYP = REG2[1];
-    wire [5:0]  UART_Prescale = REG2[7:2];
+
 
     //=========================================================
     // Crossing: UART_RX data -> Data_Sync -> REF_CLK domain -> SYS_CTRL
@@ -215,7 +220,7 @@ module SYS_TOP #(
     //=========================================================
     // Crossing: SYS_CTRL result byte -> ASYNC_FIFO -> UART_TX
     //=========================================================
-    wire [7:0] FIFO_RD_DATA;
+
 
     ASYNC_FIFO #(.DATA_WIDTH(FIFO_WIDTH)) U_ASYNC_FIFO (
         .W_CLK   (REF_CLK),
