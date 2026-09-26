@@ -20,6 +20,8 @@ module ALU(
             begin
                 ALU_OUT_Comb <= 'b0;
                 OUT_VALID_Comb <= 'b0;
+                ALU_OUT <= 'b0;
+                OUT_VALID <= 'b0;
             end
         else 
             begin

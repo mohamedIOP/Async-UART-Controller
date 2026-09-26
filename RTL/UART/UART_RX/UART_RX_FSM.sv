@@ -10,7 +10,7 @@ module UART_RX_FSM (
     output reg deser_en,
     output reg edge_bit_cnt_enable,
     output reg dat_samp_en,
-    output reg data_valid,
+    output data_valid,
     output reg soft_rst
 );
     // flags needed for the operation

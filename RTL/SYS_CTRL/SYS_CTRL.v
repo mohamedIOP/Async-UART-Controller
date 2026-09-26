@@ -74,8 +74,8 @@ module SYS_CTRL (
                       S_ALU_WR_B      = 4'd9,
                       S_ALU_EXEC      = 4'd10,
                       S_ALU_WAIT      = 4'd11,
-                      S_ALU_SEND      = 4'd12,
-                      S_TX_PULSE      = 4'd13;
+                      S_ALU_SEND_LSB  = 4'd12,
+                      S_ALU_SEND_MSB  = 4'd13;
 
     reg [3:0] state, next_state;
     reg [7:0] cmd_reg;
@@ -203,13 +203,20 @@ module SYS_CTRL (
             end
             S_ALU_WAIT: begin
                 if (OUT_Valid) begin
-                    next_state = S_ALU_SEND;
+                    next_state = S_ALU_SEND_LSB;
                     CLK_EN = 0;
                 end
             end
-            S_ALU_SEND: begin
+            S_ALU_SEND_LSB: begin
                 if (!FIFO_FULL) begin
                     TX_P_DATA = ALU_OUT[7:0];
+                    TX_D_VLD  = 1'b1;
+                    next_state = S_ALU_SEND_MSB;
+                end
+            end
+            S_ALU_SEND_MSB: begin
+                if (!FIFO_FULL) begin
+                    TX_P_DATA = ALU_OUT[15:8];
                     TX_D_VLD  = 1'b1;
                     next_state = S_IDLE;
                 end
