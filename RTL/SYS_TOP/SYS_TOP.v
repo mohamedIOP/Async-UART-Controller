@@ -85,12 +85,7 @@ module SYS_TOP #(
         .RST        (SYNC_RST_1),
         .EN         (ALU_EN),
         .ALU_OUT    (ALU_OUT),
-        .OUT_VALID  (ALU_OUT_VALID),
-        .Carry_Flag (),
-        .Arith_Flag (),
-        .Logic_Flag (),
-        .CMP_Flag   (),
-        .Shift_Flag ()
+        .OUT_VALID  (ALU_OUT_VALID)
     );
 
     // ---- RX path into SYS_CTRL (Data_Sync crosses UART_CLK -> REF_CLK) ----
@@ -102,7 +97,7 @@ module SYS_TOP #(
     wire       SYS_TX_D_VLD;
     wire       FIFO_FULL, FIFO_EMPTY;
 
-    wire       clk_div_en_unused;
+    wire       clk_div_en_inner;
 
     SYS_CTRL U_SYS_CTRL (
         .CLK          (REF_CLK),
@@ -123,7 +118,7 @@ module SYS_TOP #(
         .TX_P_DATA    (SYS_TX_P_DATA),
         .TX_D_VLD     (SYS_TX_D_VLD),
         .FIFO_FULL    (FIFO_FULL),
-        .clk_div_en   (clk_div_en_unused)
+        .clk_div_en   (clk_div_en_inner)
     );
 
     //=========================================================
@@ -157,7 +152,7 @@ module SYS_TOP #(
     ClkDiv U_ClkDiv_RX (
         .i_ref_clk   (UART_CLK),
         .i_rst_n     (SYNC_RST_2),
-        .i_clk_en    (1'b1),          // divider is always on, per spec
+        .i_clk_en    (clk_div_en_inner),          // divider is always on, per spec
         .i_div_ratio (RX_div_ratio),
         .o_div_clk   (RX_CLK)
     );
@@ -165,7 +160,7 @@ module SYS_TOP #(
     ClkDiv U_ClkDiv_TX (
         .i_ref_clk   (UART_CLK),
         .i_rst_n     (SYNC_RST_2),
-        .i_clk_en    (1'b1),
+        .i_clk_en    (clk_div_en_inner),
         .i_div_ratio (REG3),
         .o_div_clk   (TX_CLK)
     );
