@@ -19,6 +19,8 @@ puts "###########################################"
 
 #Add the path of the libraries to the search_path variable
 lappend search_path /home/IC/tsmc_fb_cl013g_sc/aci/sc-m/synopsys
+lappend search_path /home/ICer/IC/Projects/System/std_cells
+lappend search_path /home/ICer/IC/Projects/System/rtl
 
 set SSLIB "scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.db"
 set TTLIB "scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.db"
@@ -36,15 +38,17 @@ puts "###########################################"
 puts "#             Reading RTL Files           #"
 puts "###########################################"
 
-set file_format verilog
+set file_format sverilog
 
 set fh [open system.lst r+]
 set rtl [read $fh]
 set designs ""
 regsub -all "\n" $rtl " " designs
 
-read_file -format $file_format $designs
+#read_file -format $file_format $designs
+analyze -format $file_format [split $designs]
 
+elaborate $top_module
 ###################### Defining toplevel ###################################
 
 current_design $top_module
@@ -75,7 +79,7 @@ puts "###############################################"
 puts "########## Mapping & Optimization #############"
 puts "###############################################"
 
-compile 
+compile_ultra
 
 #############################################################################
 # Write out files
@@ -99,4 +103,4 @@ report_constraint -all_violators -nosplit > reports/constraints.rpt
 
 #gui_start
 
-#exit
+exit
