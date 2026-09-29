@@ -174,7 +174,20 @@ module SYS_TOP #(
     // Clock Domain 2 (UART_CLK): Clock Dividers, UART, PULSE_GEN
     //=========================================================
     wire RX_CLK, TX_CLK;
+    wire RX_CLK_MUXED, TX_CLK_MUXED;
+    mux2X1 UART_CLK_RX_CLK_MUX_CLK (
+        .IN_0(RX_CLK),
+        .IN_1(scan_clk),
+        .SEL(test_mode),
+        .OUT(RX_CLK_MUXED)
+    );
 
+    mux2X1 UART_CLK_TX_CLK_MUX_CLK (
+        .IN_0(TX_CLK),
+        .IN_1(scan_clk),
+        .SEL(test_mode),
+        .OUT(TX_CLK_MUXED)
+    );
     // Decode the 6-bit Prescale field (REG2[7:2], synced into this domain
     // as UART_Prescale below) into the RX divider's ratio. Keeps
     // prescale_raw * RX_div_ratio constant (=32) across all four legal
@@ -222,8 +235,8 @@ module SYS_TOP #(
 
     UART U_UART (
         .RST            (SYNC_RST_2_MUXED),
-        .TX_CLK         (TX_CLK),
-        .RX_CLK         (RX_CLK),
+        .TX_CLK         (TX_CLK_MUXED),
+        .RX_CLK         (RX_CLK_MUXED),
         .RX_IN_S        (RX_IN),
         .RX_OUT_P       (UART_RX_P_DATA),
         .RX_OUT_V       (UART_RX_D_VLD),
@@ -241,7 +254,7 @@ module SYS_TOP #(
     wire FIFO_R_INC;
 
     PULSE_GEN U_PULSE_GEN (
-        .clk       (TX_CLK),
+        .clk       (TX_CLK_MUXED),
         .rst       (SYNC_RST_2_MUXED),
         .lvl_sig   (UART_TX_BUSY),
         .pulse_sig (FIFO_R_INC)
@@ -270,7 +283,7 @@ module SYS_TOP #(
         .W_CLK   (REF_CLK_MUXED),
         .W_RST   (SYNC_RST_1_MUXED),
         .W_INC   (SYS_TX_D_VLD),
-        .R_CLK   (TX_CLK),
+        .R_CLK   (TX_CLK_MUXED),
         .R_RST   (SYNC_RST_2_MUXED),
         .R_INC   (FIFO_R_INC),
         .WR_DATA (SYS_TX_P_DATA),
