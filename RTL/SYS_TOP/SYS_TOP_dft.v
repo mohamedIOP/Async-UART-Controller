@@ -19,7 +19,7 @@ module SYS_TOP #(
     input  wire        test_mode, 
     input  wire        SE, 
     input  wire  [NUM_OF_CHAINS-1:0]      SI, 
-    input  wire  [NUM_OF_CHAINS-1:0]      SO, 
+    output  wire  [NUM_OF_CHAINS-1:0]      SO, 
     input  wire        REF_CLK,     // 50 MHz
     input  wire        UART_CLK,    // 3.6864 MHz
     input  wire        RST,         // active-low async top reset
@@ -36,7 +36,8 @@ module SYS_TOP #(
     wire RST_MUXED;
     wire SYNC_RST_1_MUXED;
     wire SYNC_RST_2_MUXED;
-
+    wire SYNC_RST_1; // REF_CLK domain
+    wire SYNC_RST_2; // UART_CLK domain
     mux2X1 REF_CLK_MUX_CLK (
         .IN_0(REF_CLK),
         .IN_1(scan_clk),
@@ -74,8 +75,7 @@ module SYS_TOP #(
     //=========================================================
     // Reset synchronizers - one per clock domain
     //=========================================================
-    wire SYNC_RST_1; // REF_CLK domain
-    wire SYNC_RST_2; // UART_CLK domain
+
 
     RST_SYNC RST_SYNC_1 (
         .CLK (REF_CLK_MUXED),
