@@ -10,13 +10,14 @@ module UART_RX_FSM (
     output reg deser_en,
     output reg edge_bit_cnt_enable,
     output reg dat_samp_en,
-    output data_valid,
+    output reg data_valid,
     output reg soft_rst
 );
     // flags needed for the operation
     wire bit_transition = edge_cnt == prescale - 1; //RX_IN will send another bit
     wire [4:0] middleCnt = prescale >> 1; // we have reached the middle of the cycles during one bit of RX_IN 
     wire data_sampled_flag = edge_cnt == middleCnt + 2; // We have sampled the bit from data_sampling block
+    wire data_valid_comb;
     // Define the states 
     typedef enum logic [2:0] {
         idle  = 'b000, // waiting RX_IN to be Zero
@@ -112,9 +113,17 @@ module UART_RX_FSM (
     wire [3:0] stop_bit_cnt = PAR_EN ? 4'd10 : 4'd9;
 
     // Assert data_valid during the final sample tick of the STOP bit
-    assign data_valid = (currentState == stop) 
+    assign data_valid_comb = (currentState == stop) 
                     && (bit_cnt == stop_bit_cnt) 
                     && (edge_cnt == prescale - 1) 
                     && (!PAR_EN || !par_err) 
                     && (!stp_err);
+    always @(posedge CLK or negedge RST) begin
+        if (!RST) begin
+            data_valid <= 0;
+        end
+        else begin
+            data_valid <= data_valid_comb;
+        end
+    end
 endmodule //UART_RX_FSM
