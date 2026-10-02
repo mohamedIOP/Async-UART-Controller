@@ -1,0 +1,77 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay min
+        -max_paths 1
+Design : SYS_TOP
+Version: O-2018.06-SP1
+Date   : Wed Sep 30 03:31:14 2026
+****************************************
+
+Operating Conditions: scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c   Library: scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c
+Wire Load Model Mode: top
+
+  Startpoint: U_ALU/ALU_OUT_reg[8]
+              (rising edge-triggered flip-flop clocked by ALU_CLK)
+  Endpoint: U_ALU/ALU_OUT_reg[9]
+            (rising edge-triggered flip-flop clocked by ALU_CLK)
+  Path Group: ALU_CLK
+  Path Type: min
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock ALU_CLK (rise edge)                0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  U_ALU/ALU_OUT_reg[8]/CK (SDFFRQX1M)      0.00       0.00 r
+  U_ALU/ALU_OUT_reg[8]/Q (SDFFRQX1M)       0.37       0.37 r
+  U_ALU/ALU_OUT_reg[9]/SI (SDFFRQX1M)      0.00       0.37 r
+  data arrival time                                   0.37
+
+  clock ALU_CLK (rise edge)                0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  clock uncertainty                        0.10       0.10
+  U_ALU/ALU_OUT_reg[9]/CK (SDFFRQX1M)      0.00       0.10 r
+  library hold time                       -0.20      -0.10
+  data required time                                 -0.10
+  -----------------------------------------------------------
+  data required time                                 -0.10
+  data arrival time                                  -0.37
+  -----------------------------------------------------------
+  slack (MET)                                         0.46
+
+
+  Startpoint: U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]
+              (rising edge-triggered flip-flop clocked by SCAN_CLK)
+  Endpoint: U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][0]
+            (rising edge-triggered flip-flop clocked by SCAN_CLK)
+  Path Group: SCAN_CLK
+  Path Type: min
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock SCAN_CLK (rise edge)                              0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]/CK (SDFFRQX1M)
+                                                          0.00       0.00 r
+  U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]/Q (SDFFRQX1M)
+                                                          0.41       0.41 f
+  U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][0]/D (DFFRQX1M)
+                                                          0.00       0.41 f
+  data arrival time                                                  0.41
+
+  clock SCAN_CLK (rise edge)                              0.00       0.00
+  clock network delay (ideal)                             0.00       0.00
+  clock uncertainty                                       0.10       0.10
+  U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][0]/CK (DFFRQX1M)
+                                                          0.00       0.10 r
+  library hold time                                       0.00       0.10
+  data required time                                                 0.10
+  --------------------------------------------------------------------------
+  data required time                                                 0.10
+  data arrival time                                                 -0.41
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.32
+
+
+1

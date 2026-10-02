@@ -1,0 +1,46 @@
+ 
+****************************************
+Report : area
+Design : SYS_TOP
+Version: O-2018.06-SP1
+Date   : Wed Sep 30 03:31:14 2026
+****************************************
+
+Library(s) Used:
+
+    scmetro_tsmc_cl013g_rvt_ss_1p08v_125c (File: /home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.db)
+
+Number of ports:                           51
+Number of nets:                          1962
+Number of cells:                         1813
+Number of combinational cells:           1453
+Number of sequential cells:               357
+Number of macros/black boxes:               0
+Number of buf/inv:                        224
+Number of references:                      65
+
+Combinational area:              10479.690401
+Buf/Inv area:                      798.979323
+Noncombinational area:           11396.339834
+Macro/Black Box area:                0.000000
+Net Interconnect area:      undefined  (No wire load specified)
+
+Total cell area:                 21876.030235
+Total area:                 undefined
+
+Hierarchical area distribution
+------------------------------
+
+                                  Global cell area            Local cell area
+                                  -------------------  ------------------------------ 
+Hierarchical cell                 Absolute    Percent  Combi-      Noncombi-   Black-
+                                  Total       Total    national    national    boxes   Design
+--------------------------------  ----------  -------  ----------  ----------  ------  -------------
+SYS_TOP                           21876.0302    100.0   9813.6782  10763.2752  0.0000  SYS_TOP
+U_CLK_GATE                           40.0078      0.2      0.0000     40.0078  0.0000  CLK_GATE
+U_ClkDiv_RX                         551.8723      2.5    255.3439    296.5284  0.0000  ClkDiv_test_0
+U_ClkDiv_TX                         707.1967      3.2    410.6683    296.5284  0.0000  ClkDiv_test_1
+--------------------------------  ----------  -------  ----------  ----------  ------  -------------
+Total                                                  10479.6904  11396.3398  0.0000
+
+1
