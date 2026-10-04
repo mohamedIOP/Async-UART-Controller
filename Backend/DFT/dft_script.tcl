@@ -70,8 +70,7 @@ puts "###############################################"
 puts "############ Configure Scan Chains ############"
 puts "###############################################"
 
-set_scan_configuration -chain_count 3 \
-                       -clock_mixing no_mix \
+set_scan_configuration -clock_mixing no_mix \
                        -style multiplexed_flip_flop \
                        -replace true \
                        -max_length 100

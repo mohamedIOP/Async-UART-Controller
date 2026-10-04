@@ -6,15 +6,15 @@ Report : timing
         -max_paths 1
 Design : SYS_TOP
 Version: O-2018.06-SP1
-Date   : Wed Sep 30 03:31:14 2026
+Date   : Sun Oct  4 16:42:27 2026
 ****************************************
 
 Operating Conditions: scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c   Library: scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c
 Wire Load Model Mode: top
 
-  Startpoint: U_ALU/ALU_OUT_reg[8]
+  Startpoint: U_ALU/ALU_OUT_reg[0]
               (rising edge-triggered flip-flop clocked by ALU_CLK)
-  Endpoint: U_ALU/ALU_OUT_reg[9]
+  Endpoint: U_ALU/ALU_OUT_reg[1]
             (rising edge-triggered flip-flop clocked by ALU_CLK)
   Path Group: ALU_CLK
   Path Type: min
@@ -23,15 +23,15 @@ Wire Load Model Mode: top
   -----------------------------------------------------------
   clock ALU_CLK (rise edge)                0.00       0.00
   clock network delay (ideal)              0.00       0.00
-  U_ALU/ALU_OUT_reg[8]/CK (SDFFRQX1M)      0.00       0.00 r
-  U_ALU/ALU_OUT_reg[8]/Q (SDFFRQX1M)       0.37       0.37 r
-  U_ALU/ALU_OUT_reg[9]/SI (SDFFRQX1M)      0.00       0.37 r
+  U_ALU/ALU_OUT_reg[0]/CK (SDFFRQX1M)      0.00       0.00 r
+  U_ALU/ALU_OUT_reg[0]/Q (SDFFRQX1M)       0.37       0.37 r
+  U_ALU/ALU_OUT_reg[1]/SI (SDFFRQX1M)      0.00       0.37 r
   data arrival time                                   0.37
 
   clock ALU_CLK (rise edge)                0.00       0.00
   clock network delay (ideal)              0.00       0.00
   clock uncertainty                        0.10       0.10
-  U_ALU/ALU_OUT_reg[9]/CK (SDFFRQX1M)      0.00       0.10 r
+  U_ALU/ALU_OUT_reg[1]/CK (SDFFRQX1M)      0.00       0.10 r
   library hold time                       -0.20      -0.10
   data required time                                 -0.10
   -----------------------------------------------------------

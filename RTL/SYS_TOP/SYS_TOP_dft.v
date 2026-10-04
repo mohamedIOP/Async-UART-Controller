@@ -12,7 +12,7 @@ module SYS_TOP #(
     parameter RF_DEPTH   = 16,
     parameter RF_ADDR    = 4,
     parameter FIFO_WIDTH = 8,
-    parameter NUM_OF_CHAINS = 3
+    parameter NUM_OF_CHAINS = 4
 )(
     input  wire        scan_clk, 
     input  wire        scan_rst, 

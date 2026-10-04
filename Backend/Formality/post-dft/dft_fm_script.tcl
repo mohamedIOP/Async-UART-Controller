@@ -72,12 +72,12 @@ set_top SYS_TOP
 # do not verify scan in & scan out ports as a compare point as it is existed only after synthesis and not existed in the RTL
 
 #scan in
-set_dont_verify_points -type port Ref:/WORK/*/SI
-set_dont_verify_points -type port Imp:/WORK/*/SI
+set_dont_verify_points -type port Ref:/WORK/*/SI[*]
+set_dont_verify_points -type port Imp:/WORK/*/SI[*]
 
 #scan_out
-set_dont_verify_points -type port Ref:/WORK/*/SO
-set_dont_verify_points -type port Imp:/WORK/*/SO
+set_dont_verify_points -type port Ref:/WORK/*/SO[*]
+set_dont_verify_points -type port Imp:/WORK/*/SO[*]
 
 ############################### constants #####################################
 

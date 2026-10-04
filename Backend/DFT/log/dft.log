@@ -179,6 +179,15 @@ Statistics for MUX_OPs
 =====================================================================
 Presto compilation completed successfully.
 Information: Building the design 'CLK_GATE'. (HDL-193)
+
+Inferred memory devices in process
+	in routine CLK_GATE line 20 in file
+		'/home/ICer/IC/Projects/System/rtl/Clock_Gating/CLK_GATE.v'.
+===========================================================================
+|    Register Name    | Type  | Width | Bus | MB | AR | AS | SR | SS | ST |
+===========================================================================
+|    Latch_Out_reg    | Latch |   1   |  N  | N  | N  | N  | -  | -  | -  |
+===========================================================================
 Presto compilation completed successfully.
 Information: Building the design 'ALU'. (HDL-193)
 
@@ -302,11 +311,12 @@ Presto compilation completed successfully.
 Information: Building the design 'FIFO_WR'. (HDL-193)
 
 Inferred memory devices in process
-	in routine FIFO_WR line 11 in file
+	in routine FIFO_WR line 20 in file
 		'/home/ICer/IC/Projects/System/rtl/ASYNC_FIFO/FIFO_WR.v'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
+|      wptr_reg       | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
 |   waddr_total_reg   | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
 ===============================================================================
 Presto compilation completed successfully.
@@ -325,11 +335,12 @@ Presto compilation completed successfully.
 Information: Building the design 'FIFO_RD'. (HDL-193)
 
 Inferred memory devices in process
-	in routine FIFO_RD line 11 in file
+	in routine FIFO_RD line 20 in file
 		'/home/ICer/IC/Projects/System/rtl/ASYNC_FIFO/FIFO_RD.v'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
+|      rptr_reg       | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
 |   raddr_total_reg   | Flip-flop |   4   |  Y  | N  | Y  | N  | N  | N  | N  |
 ===============================================================================
 Presto compilation completed successfully.
@@ -427,21 +438,30 @@ Statistics for case statements in always block at line 6 in file
 Presto compilation completed successfully.
 Information: Building the design 'UART_RX_FSM'. (HDL-193)
 
-Statistics for case statements in always block at line 38 in file
+Statistics for case statements in always block at line 39 in file
 	'/home/ICer/IC/Projects/System/rtl/UART/UART_RX/UART_RX_FSM.sv'
 ===============================================
 |           Line           |  full/ parallel  |
 ===============================================
-|            40            |    auto/auto     |
+|            41            |    auto/auto     |
 ===============================================
 
 Inferred memory devices in process
-	in routine UART_RX_FSM line 30 in file
+	in routine UART_RX_FSM line 31 in file
 		'/home/ICer/IC/Projects/System/rtl/UART/UART_RX/UART_RX_FSM.sv'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
 |  currentState_reg   | Flip-flop |   3   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+
+Inferred memory devices in process
+	in routine UART_RX_FSM line 121 in file
+		'/home/ICer/IC/Projects/System/rtl/UART/UART_RX/UART_RX_FSM.sv'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|   data_valid_reg    | Flip-flop |   1   |  N  | N  | Y  | N  | N  | N  | N  |
 ===============================================================================
 Presto compilation completed successfully.
 Information: Building the design 'edge_bit_counter'. (HDL-193)
@@ -538,13 +558,13 @@ check_design
 ****************************************
 check_design summary:
 Version:     O-2018.06-SP1
-Date:        Wed Sep 30 03:30:42 2026
+Date:        Sun Oct  4 16:41:55 2026
 ****************************************
 
                    Name                                            Total
 --------------------------------------------------------------------------------
-Inputs/Outputs                                                     15
-    Unconnected ports (LINT-28)                                     7
+Inputs/Outputs                                                     17
+    Unconnected ports (LINT-28)                                     9
     Shorted outputs (LINT-31)                                       3
     Constant outputs (LINT-52)                                      5
 
@@ -563,8 +583,8 @@ Warning: In design 'ALU', cell 'C500' does not drive any nets. (LINT-1)
 Warning: In design 'ALU', cell 'C502' does not drive any nets. (LINT-1)
 Warning: In design 'ClkDiv', cell 'C122' does not drive any nets. (LINT-1)
 Warning: In design 'ClkDiv', cell 'C125' does not drive any nets. (LINT-1)
-Warning: In design 'FIFO_WR', cell 'C46' does not drive any nets. (LINT-1)
-Warning: In design 'FIFO_RD', cell 'C43' does not drive any nets. (LINT-1)
+Warning: In design 'FIFO_WR', cell 'B_1' does not drive any nets. (LINT-1)
+Warning: In design 'FIFO_RD', cell 'B_1' does not drive any nets. (LINT-1)
 Warning: In design 'Serializer', cell 'C104' does not drive any nets. (LINT-1)
 Warning: In design 'edge_bit_counter', cell 'C105' does not drive any nets. (LINT-1)
 Warning: In design 'edge_bit_counter', cell 'C109' does not drive any nets. (LINT-1)
@@ -572,9 +592,11 @@ Warning: In design 'edge_bit_counter', cell 'C110' does not drive any nets. (LIN
 Warning: In design 'edge_bit_counter', cell 'C113' does not drive any nets. (LINT-1)
 Warning: In design 'data_sampling', cell 'C80' does not drive any nets. (LINT-1)
 Warning: In design 'SYS_TOP', port 'SE' is not connected to any nets. (LINT-28)
+Warning: In design 'SYS_TOP', port 'SI[3]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SI[2]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SI[1]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SI[0]' is not connected to any nets. (LINT-28)
+Warning: In design 'SYS_TOP', port 'SO[3]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SO[2]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SO[1]' is not connected to any nets. (LINT-28)
 Warning: In design 'SYS_TOP', port 'SO[0]' is not connected to any nets. (LINT-28)
@@ -643,6 +665,8 @@ Warning: Design rule attributes from the driving cell will be
 	set on the port. (UID-401)
 Warning: Design rule attributes from the driving cell will be
 	set on the port. (UID-401)
+Warning: Design rule attributes from the driving cell will be
+	set on the port. (UID-401)
 Using operating conditions 'scmetro_tsmc_cl013g_rvt_ss_1p08v_125c' found in library 'scmetro_tsmc_cl013g_rvt_ss_1p08v_125c'.
 Using operating conditions 'scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c' found in library 'scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c'.
 1
@@ -681,7 +705,7 @@ puts "############ Configure Scan Chains ############"
 ############ Configure Scan Chains ############
 puts "###############################################"
 ###############################################
-set_scan_configuration -chain_count 3                        -clock_mixing no_mix                        -style multiplexed_flip_flop                        -replace true                        -max_length 100
+set_scan_configuration -clock_mixing no_mix                        -style multiplexed_flip_flop                        -replace true                        -max_length 100
 Accepted scan configuration for modes: all_dft
 1
 ###################### Mapping and Optimization ########################
@@ -708,7 +732,7 @@ Information: Evaluating DesignWare library utilization. (UISN-27)
 
 Information: Sequential output inversion is enabled.  SVF file must be used for formal verification. (OPT-1208)
 
-Information: There are 51 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+Information: There are 53 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
 
 Information: Uniquified 7 instances of design 'mux2X1'. (OPT-1056)
 Information: Uniquified 2 instances of design 'RST_SYNC'. (OPT-1056)
@@ -767,6 +791,8 @@ Information: State dependent leakage is now switched from on to off.
   ------------------------
   Processing 'SYS_TOP'
 Information: Added key list 'DesignWare' to design 'SYS_TOP'. (DDB-72)
+Information: In design 'SYS_TOP', the register 'U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[3]' is removed because it is merged to 'U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[3]'. (OPT-1215)
+Information: In design 'SYS_TOP', the register 'U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[3]' is removed because it is merged to 'U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[3]'. (OPT-1215)
  Implement Synthetic for 'SYS_TOP'.
   Processing 'SYS_TOP_DW_div_uns_J1_0'
   Processing 'ClkDiv_0'
@@ -783,6 +809,7 @@ Information: Updating design information... (UID-85)
 Information: The library cell 'HOLDX1M' in the library 'scmetro_tsmc_cl013g_rvt_ss_1p08v_125c' is not characterized for internal power. (PWR-536)
 Information: The target library(s) contains cell(s), other than black boxes, that are not characterized for internal power. (PWR-24)
 Information: Automatic shift-register identification is enabled for scan. Not all registers will be scan-replaced. (OPT-467)
+Warning: No scan equivalent exists for cell U_CLK_GATE/Latch_Out_reg (TLATNX1M). (TEST-120)
 
   Beginning Mapping Optimizations  (Ultra High effort)
   -------------------------------
@@ -837,33 +864,33 @@ Information: There is no timing violation in design SYS_TOP. Delay-based auto_un
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:12   21863.1      0.00       0.0       3.8                           11729639.0000
-    0:00:12   21863.1      0.00       0.0       3.8                           11729639.0000
-    0:00:12   21863.1      0.00       0.0       3.8                           11729639.0000
-    0:00:12   21854.8      0.00       0.0       3.8                           11747068.0000
+    0:00:12   21998.4      0.00       0.0       2.9                           11791421.0000
+    0:00:12   21998.4      0.00       0.0       2.9                           11791421.0000
+    0:00:12   21998.4      0.00       0.0       2.9                           11791421.0000
+    0:00:12   21998.4      0.00       0.0       2.9                           11791421.0000
 
   Beginning WLM Backend Optimization
   --------------------------------------
-    0:00:13   21803.1      0.00       0.0       3.1                           11623237.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
+    0:00:13   21944.3      0.00       0.0       2.5                           11662209.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
 
 
   Beginning Design Rule Fixing  (max_transition)  (max_capacitance)
@@ -873,12 +900,12 @@ Information: There is no timing violation in design SYS_TOP. Delay-based auto_un
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:13   21803.1      0.00       0.0       1.2                           11007682.0000
+    0:00:13   21943.1      0.00       0.0       2.5                           11025981.0000
   Global Optimization (Phase 31)
   Global Optimization (Phase 32)
   Global Optimization (Phase 33)
-    0:00:14   21801.9      0.00       0.0       0.0                           11009418.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           11009418.0000
+    0:00:13   21967.8      0.00       0.0       0.0                           11053738.0000
+    0:00:13   21967.8      0.00       0.0       0.0                           11053738.0000
 
 
   Beginning Leakage Power Optimization  (max_leakage_power 0)
@@ -888,7 +915,7 @@ Information: There is no timing violation in design SYS_TOP. Delay-based auto_un
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:14   21801.9      0.00       0.0       0.0                           11009418.0000
+    0:00:13   21967.8      0.00       0.0       0.0                           11053738.0000
   Global Optimization (Phase 34)
   Global Optimization (Phase 35)
   Global Optimization (Phase 36)
@@ -900,42 +927,43 @@ Information: There is no timing violation in design SYS_TOP. Delay-based auto_un
   Global Optimization (Phase 42)
   Global Optimization (Phase 43)
   Global Optimization (Phase 44)
-    0:00:14   21801.9      0.00       0.0       0.0                           11000758.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           11000758.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           11000758.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
+  Global Optimization (Phase 45)
+    0:00:13   21949.0      0.00       0.0       0.0                           11020639.0000
+    0:00:13   21949.0      0.00       0.0       0.0                           11020639.0000
+    0:00:13   21949.0      0.00       0.0       0.0                           11020639.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
 
                                   TOTAL                                                
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:14   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:15   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:15   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:15   21801.9      0.00       0.0       0.0                           10999670.0000
-    0:00:15   21801.9      0.00       0.0       0.0                           10999670.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
+    0:00:14   21949.0      0.00       0.0       0.0                           11016596.0000
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.db'
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.db'
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.db'
@@ -976,9 +1004,17 @@ Information: Starting test design rule checking. (TEST-222)
   ...checking pre-dft rules...
 
 -----------------------------------------------------------------
+Begin Modeling violations...
+
+Warning: Cell U_CLK_GATE/Latch_Out_reg (TLATNX1M) is not scannable. (TEST-126)
+
+Modeling violations completed...
+-----------------------------------------------------------------
+
+-----------------------------------------------------------------
 Begin Other violations...
 
-Warning: Cell U_CLK_GATE/U0_TLATNCAX12M has constant 1 value. (TEST-505)
+Warning: Cell U_CLK_GATE/Latch_Out_reg has constant 1 value. (TEST-505)
 
 Other violations completed...
 -----------------------------------------------------------------
@@ -986,9 +1022,12 @@ Other violations completed...
 -----------------------------------------------------------------
   DRC Report
 
-  Total violations: 1
+  Total violations: 2
 
 -----------------------------------------------------------------
+
+1 MODELING VIOLATION
+     1 Cell is not scannable violation (TEST-126)
 
 1 OTHER VIOLATION
      1 Cell is constant 1 violation (TEST-505)
@@ -999,19 +1038,20 @@ Warning: Violations occurred during test design rule checking. (TEST-124)
 -----------------------------------------------------------------
   Sequential Cell Report
 
-  1 out of 355 sequential cells have violations
+  1 out of 362 sequential cells have violations
 
 -----------------------------------------------------------------
 
 SEQUENTIAL CELLS WITH VIOLATIONS
       *   1 cell has constant 1 value
-         U_CLK_GATE/U0_TLATNCAX12M
+         U_CLK_GATE/Latch_Out_reg
 SEQUENTIAL CELLS WITHOUT VIOLATIONS
-      * 343 cells are valid scan cells
+      * 350 cells are valid scan cells
          RST_SYNC_1/Synchronizer_reg[1]
          RST_SYNC_2/Synchronizer_reg[1]
          RST_SYNC_1/Synchronizer_reg[0]
          RST_SYNC_2/Synchronizer_reg[0]
+         U_UART/U0_UART_RX/UART_RX_FSM_Block/data_valid_reg
          U_Data_Sync_RX/Multi_Flip_Flop_Synchronizer_reg[1]
          U_Data_Sync_RX/enable_pulse_reg
          U_SYS_CTRL/frame1_reg_reg[6]
@@ -1022,6 +1062,7 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_UART/U0_UART_RX/edge_bit_counter_BLock/bit_cnt_reg[3]
          U_UART/U0_UART_RX/UART_RX_FSM_Block/currentState_reg[0]
          U_SYS_CTRL/cmd_reg_reg[0]
+         U_SYS_CTRL/state_reg[1]
          U_SYS_CTRL/state_reg[2]
          U_SYS_CTRL/cmd_reg_reg[6]
          U_SYS_CTRL/cmd_reg_reg[7]
@@ -1067,7 +1108,6 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[12][0]
          U_RegFile/regArr_reg[8][0]
          U_RegFile/regArr_reg[4][0]
-         U_RegFile/regArr_reg[0][0]
          U_RegFile/regArr_reg[14][0]
          U_RegFile/regArr_reg[10][0]
          U_RegFile/regArr_reg[6][0]
@@ -1130,6 +1170,7 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[13][2]
          U_RegFile/regArr_reg[9][2]
          U_RegFile/regArr_reg[5][2]
+         U_RegFile/regArr_reg[1][2]
          U_RegFile/regArr_reg[15][2]
          U_RegFile/regArr_reg[11][2]
          U_RegFile/regArr_reg[7][2]
@@ -1168,13 +1209,16 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_ALU/ALU_OUT_reg[7]
          U_ALU/ALU_OUT_reg[8]
          U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[0]
-         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[1]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[0]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][0]
+         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[1]
          U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[2]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[1]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][1]
-         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[3]
-         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][3]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][2]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[3]
+         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][3]
          U_UART/U0_UART_TX/Serializer_Block/counter_reg[3]
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[2]
          U_UART/U0_UART_TX/Serializer_Block/counter_reg[0]
@@ -1183,11 +1227,16 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[0]
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[1]
          U_PULSE_GEN/rcv_flop_reg
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[0]
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[1]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[0]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[1]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][1]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[3]
-         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][3]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][2]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[3]
+         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][3]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[1]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[2]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[3]
@@ -1240,17 +1289,79 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/RdData_reg[2]
          U_RegFile/RdData_reg[1]
          U_RegFile/RdData_reg[7]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[0]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[1]
          U_RegFile/RdData_reg[6]
          U_RegFile/regArr_reg[2][0]
          U_RegFile/regArr_reg[3][5]
          U_RegFile/regArr_reg[2][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][6]
          U_RegFile/regArr_reg[2][6]
-         U_SYS_CTRL/state_reg[1]
          U_SYS_CTRL/state_reg[3]
          U_SYS_CTRL/state_reg[0]
          U_RegFile/regArr_reg[0][6]
+         U_RegFile/regArr_reg[0][0]
          U_RegFile/regArr_reg[1][0]
          U_RegFile/regArr_reg[0][5]
          U_RegFile/regArr_reg[2][5]
@@ -1261,76 +1372,11 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[0][3]
          U_RegFile/regArr_reg[1][3]
          U_RegFile/regArr_reg[0][2]
-         U_RegFile/regArr_reg[1][2]
          U_RegFile/regArr_reg[0][1]
          U_RegFile/regArr_reg[1][1]
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
          U_UART/U0_UART_RX/edge_bit_counter_BLock/edge_cnt_reg[4]
          U_RegFile/regArr_reg[1][6]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][0]
          U_UART/U0_UART_RX/stop_Check_BLock/stp_err_reg
          U_UART/U0_UART_RX/parity_Check_Block/par_err_reg
          U_ClkDiv_RX/div_clk_reg_reg
@@ -1353,13 +1399,13 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_ClkDiv_TX/counter_reg[0]
       *  11 cells are non-scan shift-register cells
          U_Data_Sync_RX/Pulse_Gen_Flop_reg
-         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][3]
+         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][1]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][0]
          U_PULSE_GEN/pls_flop_reg
-         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][3]
+         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][1]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][0]
          U_Data_Sync_RX/Multi_Flip_Flop_Synchronizer_reg[0]
@@ -1376,7 +1422,7 @@ Preview_dft report
 For    : 'Insert_dft' command
 Design : SYS_TOP
 Version: O-2018.06-SP1
-Date   : Wed Sep 30 03:31:02 2026
+Date   : Sun Oct  4 16:42:15 2026
 ****************************************
 
 Number of chains: 4
@@ -1386,13 +1432,13 @@ Clock domain: no_mix
 
 Chain      Scan Ports (si --> so)        # of Cells   Inst/Chain               Clock (port, time, edge)
 -----      ----------------------        ----------   ----------               ------------------------
-S 1        SI[2] -->  SO[2]                      89   RST_SYNC_1/Synchronizer_reg[0]
+S 1        SI[3] -->  SO[3]                      91   RST_SYNC_1/Synchronizer_reg[0]
                             (scan_clk, 20.0, rising) 
-S 2        SI[1] -->  SO[1]                      89   U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][7]
+S 2        SI[2] -->  SO[2]                      90   U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]
                             (scan_clk, 20.0, rising) 
-S 3        SI[0] -->  SO[0]                      88   U_RegFile/regArr_reg[3][4]
+S 3        SI[1] -->  SO[1]                      90   U_RegFile/regArr_reg[3][1]
                             (scan_clk, 20.0, rising) 
-S 4        test_si4 -->  RF_STP_ERR              88   U_RegFile/regArr_reg[14][4]
+S 4        SI[0] -->  SO[0]                      90   U_RegFile/regArr_reg[14][3]
                             (scan_clk, 20.0, rising) 
 1
 insert_dft
@@ -1418,79 +1464,81 @@ Resetting current test mode
    ELAPSED            WORST NEG   SETUP    DESIGN                            
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
   --------- --------- --------- --------- --------- -------------------------
-    0:00:20   21819.5      0.00       0.0      15.5 SE                       
-    0:00:20   21819.5      0.00       0.0      15.5 SE                       
-    0:00:20   21819.5      0.00       0.0      15.5 SE                       
-    0:00:20   21837.2      0.00       0.0      11.7 net6151                  
-    0:00:20   21837.2      0.00       0.0      11.7 net6151                  
-    0:00:20   21837.2      0.00       0.0      11.7 net6151                  
-    0:00:20   21854.8      0.00       0.0       7.9 net6152                  
-    0:00:20   21854.8      0.00       0.0       7.9 net6152                  
-    0:00:20   21854.8      0.00       0.0       7.9 net6152                  
-    0:00:20   21867.8      0.00       0.0       2.2 net6153                  
-    0:00:20   21867.8      0.00       0.0       2.2 net6153                  
-    0:00:20   21867.8      0.00       0.0       2.2 net6153                  
-    0:00:20   21867.8      0.00       0.0       2.2 net6153                  
-    0:00:20   21878.4      0.00       0.0       1.5 net6181                  
-    0:00:20   21878.4      0.00       0.0       1.5 net6181                  
-    0:00:20   21878.4      0.00       0.0       1.5 net6181                  
-    0:00:20   21878.4      0.00       0.0       0.4 net6154                  
-    0:00:20   21889.0      0.00       0.0       0.3 net6181                  
-    0:00:20   21889.0      0.00       0.0       0.3 net6181                  
-    0:00:20   21889.0      0.00       0.0       0.3 net6181                  
-    0:00:20   21889.0      0.00       0.0       0.3 net6151                  
-    0:00:20   21899.6      0.00       0.0       0.2 net6162                  
-    0:00:20   21899.6      0.00       0.0       0.2 net6162                  
-    0:00:20   21899.6      0.00       0.0       0.2 net6162                  
-    0:00:20   21910.2      0.00       0.0       0.2 net6174                  
-    0:00:20   21910.2      0.00       0.0       0.2 net6174                  
-    0:00:20   21910.2      0.00       0.0       0.2 net6174                  
-    0:00:20   21910.2      0.00       0.0       0.2 net6163                  
-    0:00:20   21910.2      0.00       0.0       0.2 net6171                  
-    0:00:20   21920.7      0.00       0.0       1.0 REG3[3]                  
-    0:00:20   21920.7      0.00       0.0       1.0 REG3[3]                  
-    0:00:20   21920.7      0.00       0.0       1.0 REG3[3]                  
-    0:00:20   21920.7      0.00       0.0       1.0 REG3[3]                  
-    0:00:20   21930.2      0.00       0.0       0.3 net6211                  
-    0:00:20   21958.4      0.00       0.0       0.5 U_RegFile/regArr[14][3]  
-    0:00:20   21958.4      0.00       0.0       0.5 U_RegFile/regArr[14][3]  
-    0:00:20   21958.4      0.00       0.0       0.5 U_RegFile/regArr[14][3]  
-    0:00:20   21958.4      0.00       0.0       0.5 U_RegFile/regArr[14][3]  
-    0:00:20   21972.5      0.00       0.0       0.4 net6182                  
-    0:00:20   21972.5      0.00       0.0       0.4 net6182                  
-    0:00:20   21972.5      0.00       0.0       0.4 net6182                  
-    0:00:20   21991.3      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   21991.3      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   21991.3      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   21978.4      0.00       0.0       0.4 net6216                  
-    0:00:20   21969.0      0.00       0.0       0.2 net6232                  
-    0:00:20   21959.6      0.00       0.0       0.0 net6218                  
-    0:00:20   21966.6      0.00       0.0       0.0 U_RegFile/regArr[14][3]  
-    0:00:20   21957.2      0.00       0.0       0.0 U_PULSE_GEN/pls_flop     
+    0:00:19   21966.6      0.00       0.0      16.4 SE                       
+    0:00:19   21966.6      0.00       0.0      16.4 SE                       
+    0:00:19   21966.6      0.00       0.0      16.4 SE                       
+    0:00:19   21984.3      0.00       0.0      12.5 net5942                  
+    0:00:19   21984.3      0.00       0.0      12.5 net5942                  
+    0:00:19   21984.3      0.00       0.0      12.5 net5942                  
+    0:00:19   22001.9      0.00       0.0       8.6 net5939                  
+    0:00:19   22001.9      0.00       0.0       8.6 net5939                  
+    0:00:19   22001.9      0.00       0.0       8.6 net5939                  
+    0:00:19   22014.9      0.00       0.0       2.9 net5940                  
+    0:00:19   22014.9      0.00       0.0       2.9 net5940                  
+    0:00:19   22014.9      0.00       0.0       2.9 net5940                  
+    0:00:19   22014.9      0.00       0.0       2.9 net5940                  
+    0:00:19   22029.0      0.00       0.0       2.1 net5941                  
+    0:00:19   22029.0      0.00       0.0       2.1 net5941                  
+    0:00:19   22029.0      0.00       0.0       2.1 net5941                  
+    0:00:19   22029.0      0.00       0.0       1.0 net5969                  
+    0:00:19   22039.6      0.00       0.0       0.9 net5941                  
+    0:00:19   22039.6      0.00       0.0       0.9 net5941                  
+    0:00:19   22039.6      0.00       0.0       0.9 net5941                  
+    0:00:19   22039.6      0.00       0.0       0.8 net5939                  
+    0:00:19   22050.2      0.00       0.0       0.7 net5952                  
+    0:00:19   22050.2      0.00       0.0       0.7 net5952                  
+    0:00:19   22050.2      0.00       0.0       0.7 net5952                  
+    0:00:19   22060.8      0.00       0.0       0.7 net5962                  
+    0:00:19   22060.8      0.00       0.0       0.7 net5962                  
+    0:00:19   22060.8      0.00       0.0       0.7 net5962                  
+    0:00:19   22060.8      0.00       0.0       0.7 net5950                  
+    0:00:19   22060.8      0.00       0.0       0.7 net5960                  
+    0:00:19   22071.4      0.00       0.0       1.5 REG3[0]                  
+    0:00:19   22071.4      0.00       0.0       1.5 REG3[0]                  
+    0:00:19   22071.4      0.00       0.0       1.5 REG3[0]                  
+    0:00:19   22071.4      0.00       0.0       1.5 REG3[0]                  
+    0:00:19   22080.8      0.00       0.0       1.2 RF_STP_ERR               
+    0:00:19   22080.8      0.00       0.0       1.2 RF_STP_ERR               
+    0:00:19   22090.2      0.00       0.0       0.5 net6001                  
+    0:00:19   22104.3      0.00       0.0       0.4 net5970                  
+    0:00:19   22104.3      0.00       0.0       0.4 net5970                  
+    0:00:19   22104.3      0.00       0.0       0.4 net5970                  
+    0:00:19   22132.6      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:19   22132.6      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:19   22132.6      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:19   22132.6      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:19   22151.4      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:19   22151.4      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:19   22151.4      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:20   22138.4      0.00       0.0       0.6 net6008                  
+    0:00:20   22129.0      0.00       0.0       0.4 net6024                  
+    0:00:20   22119.6      0.00       0.0       0.2 net6018                  
+    0:00:20   22126.7      0.00       0.0       0.2 U_RegFile/regArr[14][2]  
+    0:00:20   22117.3      0.00       0.0       0.2 U_PULSE_GEN/pls_flop     
 
 
-  Beginning Phase 2 Design Rule Fixing  (max_capacitance)
+  Beginning Phase 2 Design Rule Fixing  (max_transition)  (max_capacitance)
   ------------------------------------
 
                                   TOTAL                                      
    ELAPSED            WORST NEG   SETUP    DESIGN                            
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT         
   --------- --------- --------- --------- --------- -------------------------
-    0:00:20   21976.0      0.00       0.0       0.2 U_RegFile/regArr[14][3]  
-    0:00:20   21976.0      0.00       0.0       0.2 U_RegFile/regArr[14][3]  
-    0:00:20   21976.0      0.00       0.0       0.2 U_RegFile/regArr[14][3]  
-    0:00:20   21994.9      0.00       0.0       0.4 REG3[3]                  
-    0:00:20   21994.9      0.00       0.0       0.4 REG3[3]                  
-    0:00:20   21994.9      0.00       0.0       0.4 REG3[3]                  
-    0:00:20   22013.7      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   22013.7      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   22013.7      0.00       0.0       0.6 U_PULSE_GEN/pls_flop     
-    0:00:20   22004.3      0.00       0.0       0.4 net6240                  
-    0:00:20   21994.9      0.00       0.0       0.2 net6244                  
-    0:00:20   21985.5      0.00       0.0       0.0 net6248                  
-    0:00:20   21976.0      0.00       0.0       0.0 U_PULSE_GEN/pls_flop     
-    0:00:20   21966.6      0.00       0.0       0.0 U_RegFile/regArr[14][3]  
-    0:00:20   21957.2      0.00       0.0       0.0 REG3[3]                  
+    0:00:20   22136.1      0.00       0.0       0.4 REG3[0]                  
+    0:00:20   22136.1      0.00       0.0       0.4 REG3[0]                  
+    0:00:20   22136.1      0.00       0.0       0.4 REG3[0]                  
+    0:00:20   22154.9      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:20   22154.9      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:20   22154.9      0.00       0.0       0.6 U_RegFile/regArr[14][2]  
+    0:00:20   22173.7      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:20   22173.7      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:20   22173.7      0.00       0.0       0.9 U_PULSE_GEN/pls_flop     
+    0:00:20   22164.3      0.00       0.0       0.6 net6032                  
+    0:00:20   22154.9      0.00       0.0       0.4 net6036                  
+    0:00:20   22145.5      0.00       0.0       0.2 net6040                  
+    0:00:20   22136.1      0.00       0.0       0.2 U_PULSE_GEN/pls_flop     
+    0:00:20   22126.7      0.00       0.0       0.2 REG3[0]                  
+    0:00:20   22117.3      0.00       0.0       0.2 U_RegFile/regArr[14][2]  
 
 1
 ######################## Optimize Logic Post-DFT #######################
@@ -1523,15 +1571,15 @@ Information: The target library(s) contains cell(s), other than black boxes, tha
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:04   21957.2      0.00       0.0       0.0                           11077637.0000
-    0:00:04   21957.2      0.00       0.0       0.0                           11077637.0000
+    0:00:04   22117.3      0.00       0.0       0.2                           11102773.0000
+    0:00:04   22117.3      0.00       0.0       0.2                           11102773.0000
 
   Beginning Mapping Optimizations  (Ultra High effort)  (Incremental)
   -------------------------------
 
   Beginning Incremental Implementation Selection
   ----------------------------------------------
-    0:00:05   21957.2      0.00       0.0       0.0                           11077637.0000
+    0:00:05   22117.3      0.00       0.0       0.2                           11102773.0000
 
   Beginning Delay Optimization Phase
   ----------------------------------
@@ -1540,22 +1588,22 @@ Information: The target library(s) contains cell(s), other than black boxes, tha
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:05   21957.2      0.00       0.0       0.0                           11077637.0000
-    0:00:05   21957.2      0.00       0.0       0.0                           11077637.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
+    0:00:05   22117.3      0.00       0.0       0.2                           11102773.0000
+    0:00:05   22117.3      0.00       0.0       0.2                           11102773.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
 
   Beginning Delay Optimization
   ----------------------------
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:05   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:06   21943.1      0.00       0.0       0.0                           11039071.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
 
 
   Beginning Design Rule Fixing  (max_capacitance)
@@ -1565,38 +1613,37 @@ Information: The target library(s) contains cell(s), other than black boxes, tha
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:06   21943.1      0.00       0.0       0.0                           11039071.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11062426.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:05   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
 
                                   TOTAL                                                
    ELAPSED            WORST NEG   SETUP    DESIGN                              LEAKAGE 
     TIME      AREA      SLACK     COST    RULE COST         ENDPOINT            POWER  
   --------- --------- --------- --------- --------- ------------------------- ---------
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:06   21953.7      0.00       0.0       0.0                           11049610.0000
-    0:00:07   21879.6      0.00       0.0       0.0                           10990139.0000
-    0:00:07   21879.6      0.00       0.0       0.0                           10990139.0000
-    0:00:07   21876.0      0.00       0.0       0.0                           10989265.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22098.4      0.00       0.0       0.0                           11064225.0000
+    0:00:06   22024.3      0.00       0.0       0.0                           11008914.0000
+    0:00:06   22024.3      0.00       0.0       0.0                           11008914.0000
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.db'
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.db'
 Loading db file '/home/ICer/IC/Projects/System/std_cells/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.db'
@@ -1632,7 +1679,7 @@ Information: Starting test design rule checking. (TEST-222)
 -----------------------------------------------------------------
 Begin Other violations...
 
-Warning: Cell U_CLK_GATE/U0_TLATNCAX12M has constant 1 value. (TEST-505)
+Warning: Cell U_CLK_GATE/Latch_Out_reg has constant 1 value. (TEST-505)
 
 Other violations completed...
 -----------------------------------------------------------------
@@ -1653,19 +1700,20 @@ Warning: Violations occurred during test design rule checking. (TEST-124)
 -----------------------------------------------------------------
   Sequential Cell Report
 
-  1 out of 355 sequential cells have violations
+  1 out of 362 sequential cells have violations
 
 -----------------------------------------------------------------
 
 SEQUENTIAL CELLS WITH VIOLATIONS
       *   1 cell has constant 1 value
-         U_CLK_GATE/U0_TLATNCAX12M
+         U_CLK_GATE/Latch_Out_reg
 SEQUENTIAL CELLS WITHOUT VIOLATIONS
-      * 343 cells are valid scan cells
+      * 350 cells are valid scan cells
          RST_SYNC_1/Synchronizer_reg[1]
          RST_SYNC_2/Synchronizer_reg[1]
          RST_SYNC_1/Synchronizer_reg[0]
          RST_SYNC_2/Synchronizer_reg[0]
+         U_UART/U0_UART_RX/UART_RX_FSM_Block/data_valid_reg
          U_Data_Sync_RX/Multi_Flip_Flop_Synchronizer_reg[1]
          U_Data_Sync_RX/enable_pulse_reg
          U_SYS_CTRL/frame1_reg_reg[6]
@@ -1676,6 +1724,7 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_UART/U0_UART_RX/edge_bit_counter_BLock/bit_cnt_reg[3]
          U_UART/U0_UART_RX/UART_RX_FSM_Block/currentState_reg[0]
          U_SYS_CTRL/cmd_reg_reg[0]
+         U_SYS_CTRL/state_reg[1]
          U_SYS_CTRL/state_reg[2]
          U_SYS_CTRL/cmd_reg_reg[6]
          U_SYS_CTRL/cmd_reg_reg[7]
@@ -1721,7 +1770,6 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[12][0]
          U_RegFile/regArr_reg[8][0]
          U_RegFile/regArr_reg[4][0]
-         U_RegFile/regArr_reg[0][0]
          U_RegFile/regArr_reg[14][0]
          U_RegFile/regArr_reg[10][0]
          U_RegFile/regArr_reg[6][0]
@@ -1731,7 +1779,6 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[15][0]
          U_RegFile/regArr_reg[11][0]
          U_RegFile/regArr_reg[7][0]
-         U_RegFile/regArr_reg[3][0]
          U_RegFile/regArr_reg[12][5]
          U_RegFile/regArr_reg[8][5]
          U_RegFile/regArr_reg[4][5]
@@ -1762,6 +1809,7 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[8][3]
          U_RegFile/regArr_reg[4][3]
          U_ALU/ALU_OUT_reg[4]
+         U_RegFile/regArr_reg[14][3]
          U_RegFile/regArr_reg[10][3]
          U_RegFile/regArr_reg[6][3]
          U_RegFile/regArr_reg[2][3]
@@ -1771,17 +1819,18 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[15][3]
          U_RegFile/regArr_reg[11][3]
          U_RegFile/regArr_reg[7][3]
+         U_RegFile/regArr_reg[3][3]
          U_RegFile/regArr_reg[12][2]
          U_RegFile/regArr_reg[8][2]
          U_RegFile/regArr_reg[4][2]
          U_ALU/ALU_OUT_reg[3]
-         U_RegFile/regArr_reg[14][2]
          U_RegFile/regArr_reg[10][2]
          U_RegFile/regArr_reg[6][2]
          U_RegFile/regArr_reg[2][2]
          U_RegFile/regArr_reg[13][2]
          U_RegFile/regArr_reg[9][2]
          U_RegFile/regArr_reg[5][2]
+         U_RegFile/regArr_reg[1][2]
          U_RegFile/regArr_reg[15][2]
          U_RegFile/regArr_reg[11][2]
          U_RegFile/regArr_reg[7][2]
@@ -1820,13 +1869,16 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_ALU/ALU_OUT_reg[7]
          U_ALU/ALU_OUT_reg[8]
          U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[0]
-         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[1]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[0]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][0]
+         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[1]
          U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[2]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[1]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][1]
-         U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[3]
-         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][3]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][2]
+         U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[3]
+         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[0][3]
          U_UART/U0_UART_TX/Serializer_Block/counter_reg[3]
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[2]
          U_UART/U0_UART_TX/Serializer_Block/counter_reg[0]
@@ -1835,11 +1887,16 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[0]
          U_UART/U0_UART_TX/FSM_Block/currentState_reg[1]
          U_PULSE_GEN/rcv_flop_reg
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[0]
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[1]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[0]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[1]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][1]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[3]
-         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][3]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][2]
+         U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[3]
+         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][3]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[1]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[2]
          U_UART/U0_UART_TX/Serializer_Block/pDataReg_reg[3]
@@ -1892,16 +1949,78 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/RdData_reg[2]
          U_RegFile/RdData_reg[1]
          U_RegFile/RdData_reg[7]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[0]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[1]
          U_RegFile/RdData_reg[6]
          U_RegFile/regArr_reg[2][0]
          U_RegFile/regArr_reg[3][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][1]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][2]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][3]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][4]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][5]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][7]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][0]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][6]
+         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][6]
          U_RegFile/regArr_reg[2][6]
-         U_SYS_CTRL/state_reg[1]
          U_SYS_CTRL/state_reg[3]
          U_SYS_CTRL/state_reg[0]
          U_RegFile/regArr_reg[0][6]
+         U_RegFile/regArr_reg[0][0]
          U_RegFile/regArr_reg[1][0]
          U_RegFile/regArr_reg[0][5]
          U_RegFile/regArr_reg[2][5]
@@ -1912,81 +2031,16 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_RegFile/regArr_reg[0][3]
          U_RegFile/regArr_reg[1][3]
          U_RegFile/regArr_reg[0][2]
-         U_RegFile/regArr_reg[1][2]
          U_RegFile/regArr_reg[0][1]
          U_RegFile/regArr_reg[1][1]
+         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
          U_UART/U0_UART_RX/edge_bit_counter_BLock/edge_cnt_reg[4]
          U_RegFile/regArr_reg[1][6]
-         U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[3][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[7][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[2][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[4][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][2]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[5][0]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][7]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][6]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][5]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][4]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][3]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][1]
-         U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[1][0]
          U_UART/U0_UART_RX/stop_Check_BLock/stp_err_reg
          U_UART/U0_UART_RX/parity_Check_Block/par_err_reg
-         U_RegFile/regArr_reg[3][3]
+         U_RegFile/regArr_reg[3][0]
+         U_RegFile/regArr_reg[14][2]
          U_RegFile/regArr_reg[2][7]
-         U_RegFile/regArr_reg[14][3]
          U_ClkDiv_RX/div_clk_reg_reg
          U_ClkDiv_RX/counter_reg[7]
          U_ClkDiv_RX/counter_reg[6]
@@ -2007,12 +2061,12 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
          U_ClkDiv_TX/counter_reg[0]
       *  11 cells are non-scan shift-register cells
          U_Data_Sync_RX/Pulse_Gen_Flop_reg
-         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][3]
+         U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][1]
          U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[1][0]
-         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][3]
+         U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][2]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][1]
          U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][0]
          U_Data_Sync_RX/Multi_Flip_Flop_Synchronizer_reg[0]
@@ -2021,26 +2075,30 @@ SEQUENTIAL CELLS WITHOUT VIOLATIONS
 ....Inferring feed-through connections....
 Information: Test design rule checking completed. (TEST-123)
   Running test coverage estimation...
- 16058 faults were added to fault list.
- 0            7380   5747         0/0/0    63.77%      0.01
- 0            1967   3780         0/0/0    76.03%      0.02
- 0             832   2948         0/0/0    81.21%      0.02
- 0             678   2270         0/0/0    85.43%      0.02
- 0             408   1862         0/0/0    87.97%      0.02
- 0             321   1541         0/0/0    89.97%      0.03
- 0             254   1287         0/0/1    91.55%      0.03
- 0             220   1067         0/0/1    92.92%      0.04
- 0             223    843         1/0/1    94.32%      0.04
- 0             145    698         1/0/1    95.22%      0.04
- 0             169    525         2/1/1    96.29%      0.04
- 0              86    434         5/1/1    96.86%      0.04
- 0              87    343         6/3/1    97.41%      0.05
- 0              69    272         7/4/1    97.85%      0.05
- 0              52    218         8/5/1    98.18%      0.05
- 0              99    109        13/6/3    98.85%      0.05
- 0              38     69        15/6/3    99.10%      0.05
- 0              47      7       21/10/3    99.45%      0.06
- 0               5      2       21/10/3    99.48%      0.06
+ 16140 faults were added to fault list.
+ ----------------------------------------------------------
+ #patterns     #faults     #ATPG faults  test      process
+ stored     detect/active  red/au/abort  coverage  CPU time
+ ---------  -------------  ------------  --------  --------
+ Begin deterministic ATPG: #uncollapsed_faults=13144, abort_limit=10...
+ 0            7686   5458         0/0/0    65.72%      0.01
+ 0            1584   3874         0/0/0    75.53%      0.03
+ 0             917   2957         0/0/0    81.22%      0.03
+ 0             618   2338         1/0/1    85.05%      0.04
+ 0             446   1892         1/0/2    87.82%      0.05
+ 0             312   1580         1/0/2    89.75%      0.05
+ 0             299   1281         1/0/2    91.60%      0.06
+ 0             271   1008         1/1/2    93.28%      0.06
+ 0             151    857         1/1/2    94.22%      0.07
+ 0             150    707         1/1/2    95.15%      0.07
+ 0             120    584         4/1/2    95.91%      0.09
+ 0             148    428         7/2/2    96.87%      0.10
+ 0              96    330         8/3/2    97.47%      0.10
+ 0              76    251        10/4/2    97.95%      0.11
+ 0              93    149        13/6/2    98.56%      0.13
+ 0              52     95        15/6/2    98.90%      0.13
+ 0              41     41        20/9/3    99.21%      0.14
+ 0              35      2        23/9/3    99.45%      0.15
  
             Pattern Summary Report
  -----------------------------------------------
@@ -2052,14 +2110,14 @@ Information: Test design rule checking completed. (TEST-123)
  -----------------------------------------------
  fault class                     code   #faults
  ------------------------------  ----  ---------
- Detected                         DT      15939
+ Detected                         DT      16014
  Possibly detected                PT          0
- Undetectable                     UD         36
- ATPG untestable                  AU         81
+ Undetectable                     UD         37
+ ATPG untestable                  AU         87
  Not detected                     ND          2
  -----------------------------------------------
- total faults                             16058
- test coverage                            99.48%
+ total faults                             16140
+ test coverage                            99.45%
  -----------------------------------------------
   Information: The test coverage above may be inferior
                than the real test coverage with customized
@@ -2092,9 +2150,8 @@ report_timing -delay_type min > reports/hold.rpt
 report_timing -delay_type max > reports/setup.rpt
 report_clock -attributes    > reports/clocks.rpt
 exit
-
-Memory usage for main task 487 Mbytes.
-Memory usage for this session 487 Mbytes.
-CPU usage for this session 30 seconds ( 0.01 hours ).
+Memory usage for main task 488 Mbytes.
+Memory usage for this session 488 Mbytes.
+CPU usage for this session 28 seconds ( 0.01 hours ).
 
 Thank you...

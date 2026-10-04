@@ -8,7 +8,7 @@ Report : power
         -analysis_effort low
 Design : SYS_TOP
 Version: O-2018.06-SP1
-Date   : Wed Sep 30 03:31:14 2026
+Date   : Sun Oct  4 16:42:27 2026
 ****************************************
 
 
@@ -34,8 +34,8 @@ Power-specific unit information :
                                        Switch   Int      Leak     Total
 Hierarchy                              Power    Power    Power    Power    %
 --------------------------------------------------------------------------------
-SYS_TOP                                4.92e-02    0.328 1.04e+07    0.387 100.0
-  U_ClkDiv_TX (ClkDiv_test_1)          5.00e-04 8.97e-03 2.99e+05 9.76e-03   2.5
-  U_ClkDiv_RX (ClkDiv_test_0)          2.14e-04 7.75e-03 2.22e+05 8.19e-03   2.1
-  U_CLK_GATE (CLK_GATE)                1.83e-03 4.71e-03 3.73e+04 6.58e-03   1.7
+SYS_TOP                                4.95e-02    0.325 1.05e+07    0.385 100.0
+  U_ClkDiv_TX (ClkDiv_test_1)          5.07e-04 8.75e-03 2.94e+05 9.56e-03   2.5
+  U_ClkDiv_RX (ClkDiv_test_0)          1.67e-04 7.40e-03 2.21e+05 7.79e-03   2.0
+  U_CLK_GATE (CLK_GATE)                1.83e-03 9.94e-04 1.48e+04 2.84e-03   0.7
 1

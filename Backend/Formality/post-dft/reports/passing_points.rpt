@@ -4,13 +4,10 @@ Report         : passing_points
 Reference      : Ref:/WORK/SYS_TOP
 Implementation : Imp:/WORK/SYS_TOP
 Version        : L-2016.03-SP1
-Date           : Wed Sep 30 03:57:01 2026
+Date           : Sun Oct  4 16:59:48 2026
 **************************************************
 
-358 Passing compare points:
-
-  Ref  LAT        Ref:/WORK/SYS_TOP/U_CLK_GATE/U0_TLATNCAX12M
-  Impl LAT        Imp:/WORK/SYS_TOP/U_CLK_GATE/U0_TLATNCAX12M
+365 Passing compare points:
 
   Ref  DFF        Ref:/WORK/SYS_TOP/RST_SYNC_1/Synchronizer_reg[0]
   Impl DFF        Imp:/WORK/SYS_TOP/RST_SYNC_1/Synchronizer_reg[0]
@@ -276,8 +273,17 @@ Date           : Wed Sep 30 03:57:01 2026
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[2]
 
-  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[3]
-  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/raddr_total_reg[3]
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[0]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[0]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[1]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[1]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[2]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[2]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[3]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_RD_Block/rptr_reg[3]
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[0]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[0]
@@ -288,8 +294,17 @@ Date           : Wed Sep 30 03:57:01 2026
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[2]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[2]
 
-  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[3]
-  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/waddr_total_reg[3]
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[0]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[0]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[1]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[1]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[2]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[2]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[3]
+  Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/FIFO_WR_Block/wptr_reg[3]
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/sync_r2w/Synchronizer_reg[0][0]
@@ -338,6 +353,9 @@ Date           : Wed Sep 30 03:57:01 2026
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][3]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ASYNC_FIFO/sync_w2r/Synchronizer_reg[1][3]
+
+  Ref  LAT        Ref:/WORK/SYS_TOP/U_CLK_GATE/Latch_Out_reg
+  Impl LAT        Imp:/WORK/SYS_TOP/U_CLK_GATE/Latch_Out_reg
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_ClkDiv_RX/counter_reg[0]
   Impl DFF        Imp:/WORK/SYS_TOP/U_ClkDiv_RX/counter_reg[0]
@@ -950,6 +968,9 @@ Date           : Wed Sep 30 03:57:01 2026
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_UART/U0_UART_RX/UART_RX_FSM_Block/currentState_reg[2]
   Impl DFF        Imp:/WORK/SYS_TOP/U_UART/U0_UART_RX/UART_RX_FSM_Block/currentState_reg[2]
+
+  Ref  DFF        Ref:/WORK/SYS_TOP/U_UART/U0_UART_RX/UART_RX_FSM_Block/data_valid_reg
+  Impl DFF        Imp:/WORK/SYS_TOP/U_UART/U0_UART_RX/UART_RX_FSM_Block/data_valid_reg
 
   Ref  DFF        Ref:/WORK/SYS_TOP/U_UART/U0_UART_RX/data_sampling_Block/inner_counter_reg[0]
   Impl DFF        Imp:/WORK/SYS_TOP/U_UART/U0_UART_RX/data_sampling_Block/inner_counter_reg[0]

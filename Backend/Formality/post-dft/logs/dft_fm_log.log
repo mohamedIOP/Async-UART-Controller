@@ -19,7 +19,7 @@
 
 Build: 4031317
 Hostname: IC_EDA (RHEL64)
-Current time: Wed Sep 30 03:56:58 2026
+Current time: Sun Oct  4 16:59:45 2026
 
 Loading db file '/home/synopsys/Formality2016/libraries/syn/gtech.db'
 ########################### Define Top Module ############################
@@ -265,19 +265,31 @@ Implementation design set to 'Imp:/WORK/SYS_TOP'
 ############################### Don't verify #################################
 # do not verify scan in & scan out ports as a compare point as it is existed only after synthesis and not existed in the RTL
 #scan in
-set_dont_verify_points -type port Ref:/WORK/*/SI
-Error: Unknown name: 'Ref:/WORK/*/SI' (FM-036)
-0
-set_dont_verify_points -type port Imp:/WORK/*/SI
-Error: Unknown name: 'Imp:/WORK/*/SI' (FM-036)
-0
+set_dont_verify_points -type port Ref:/WORK/*/SI[*]
+Set don't verify point 'Ref:/WORK/SYS_TOP/SI[0]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SI[1]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SI[2]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SI[3]'
+1
+set_dont_verify_points -type port Imp:/WORK/*/SI[*]
+Set don't verify point 'Imp:/WORK/SYS_TOP/SI[0]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SI[1]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SI[2]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SI[3]'
+1
 #scan_out
-set_dont_verify_points -type port Ref:/WORK/*/SO
-Error: Unknown name: 'Ref:/WORK/*/SO' (FM-036)
-0
-set_dont_verify_points -type port Imp:/WORK/*/SO
-Error: Unknown name: 'Imp:/WORK/*/SO' (FM-036)
-0
+set_dont_verify_points -type port Ref:/WORK/*/SO[*]
+Set don't verify point 'Ref:/WORK/SYS_TOP/SO[0]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SO[1]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SO[2]'
+Set don't verify point 'Ref:/WORK/SYS_TOP/SO[3]'
+1
+set_dont_verify_points -type port Imp:/WORK/*/SO[*]
+Set don't verify point 'Imp:/WORK/SYS_TOP/SO[0]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SO[1]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SO[2]'
+Set don't verify point 'Imp:/WORK/SYS_TOP/SO[3]'
+1
 ############################### constants #####################################
 # all atpg enable(test_mode, scan_enable) are zero during formal compare
 #test_mode
@@ -299,7 +311,7 @@ match
 Reference design is 'Ref:/WORK/SYS_TOP'
 Implementation design is 'Imp:/WORK/SYS_TOP'
 Status:  Checking designs...
-    Warning: 3 (0) undriven nets found in reference (implementation) design; see formality1.log for list (FM-399)
+    Warning: 4 (0) undriven nets found in reference (implementation) design; see formality1.log for list (FM-399)
 Status:  Building verification models...
 Status:  Processing Guide Commands...
     Set 'Ref:/WORK/SYS_TOP/SE' to constant 0    
@@ -308,9 +320,6 @@ Status:  Processing Guide Commands...
     Set 'Imp:/WORK/SYS_TOP/test_mode' to constant 1    
     Set 'Imp:/WORK/SYS_TOP/SE' to constant 0    ; previous value was also 0
     Set 'Imp:/WORK/SYS_TOP/test_mode' to constant 1    ; previous value was also 1
-    Set don't verify point 'Ref:/WORK/SYS_TOP/SO[2]'
-    Set don't verify point 'Ref:/WORK/SYS_TOP/SO[1]'
-    Set don't verify point 'Ref:/WORK/SYS_TOP/SO[0]'
 
 ***************************** Guidance Summary *****************************
                                          Status
@@ -327,6 +336,7 @@ instance_map        :         30          0          0          0         30
 mark                :         22          0          0          0         22
 merge               :          8          0          0          0          8
 multiplier          :          2          0          0          0          2
+reg_merging         :          2          0          0          0          2
 replace             :         13          0          0          0         13
 scan_input          :          2          0          0          0          2
 ungroup             :         37          0          0          0         37
@@ -344,13 +354,13 @@ SVF files produced:
 Status:  Matching...
     
 *********************************** Matching Results ***********************************    
- 358 Compare points matched by name    
+ 365 Compare points matched by name    
  0 Compare points matched by signature analysis    
  0 Compare points matched by topology    
  5 Matched primary inputs, black-box outputs    
  0(0) Unmatched reference(implementation) compare points    
  0(0) Unmatched reference(implementation) primary inputs, black-box outputs    
- 4(1) Unmatched reference(implementation) unread points    
+ 6(0) Unmatched reference(implementation) unread points    
 ****************************************************************************************
 
 1
@@ -360,13 +370,13 @@ Reference design is 'Ref:/WORK/SYS_TOP'
 Implementation design is 'Imp:/WORK/SYS_TOP'
     
 *********************************** Matching Results ***********************************    
- 358 Compare points matched by name    
+ 365 Compare points matched by name    
  0 Compare points matched by signature analysis    
  0 Compare points matched by topology    
  5 Matched primary inputs, black-box outputs    
  0(0) Unmatched reference(implementation) compare points    
  0(0) Unmatched reference(implementation) primary inputs, black-box outputs    
- 4(1) Unmatched reference(implementation) unread points    
+ 6(0) Unmatched reference(implementation) unread points    
 ****************************************************************************************
 
 Status:  Verifying...
@@ -407,14 +417,14 @@ Verification SUCCEEDED
 -----------------------------------------------------------------------
  Reference design: Ref:/WORK/SYS_TOP
  Implementation design: Imp:/WORK/SYS_TOP
- 358 Passing compare points
+ 365 Passing compare points
 ----------------------------------------------------------------------------------------
 Matched Compare Points     BBPin    Loop   BBNet     Cut    Port     DFF     LAT   TOTAL
 ----------------------------------------------------------------------------------------
-Passing (equivalent)           0       0       0       0       3     354       1     358
+Passing (equivalent)           0       0       0       0       3     361       1     365
 Failing (not equivalent)       0       0       0       0       0       0       0       0
 Not Compared
-  Don't verify                 0       0       0       0       3       0       0       3
+  Don't verify                 0       0       0       0       4       0       0       4
 ****************************************************************************************
 1
 if {!$successful} {
@@ -426,14 +436,3 @@ report_failing_points > "reports/failing_points.rpt"
 report_aborted_points > "reports/aborted_points.rpt"
 report_unverified_points > "reports/unverified_points.rpt"
 start_gui
-     1  source -echo -verbose dft_fm_script.tcl
-1
-1
-fm_shell (verify)> exit
-
-Maximum memory usage for this session: 474840 KB
-CPU usage for this session: 4.05 seconds
-Current time: Wed Sep 30 03:58:31 2026
-Elapsed time: 93 seconds
-
-Thank you for using Formality (R)!

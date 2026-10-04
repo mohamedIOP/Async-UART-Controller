@@ -6,15 +6,15 @@ Report : timing
         -max_paths 1
 Design : SYS_TOP
 Version: O-2018.06-SP1
-Date   : Wed Sep 30 03:31:14 2026
+Date   : Sun Oct  4 16:42:27 2026
 ****************************************
 
 Operating Conditions: scmetro_tsmc_cl013g_rvt_ss_1p08v_125c   Library: scmetro_tsmc_cl013g_rvt_ss_1p08v_125c
 Wire Load Model Mode: top
 
-  Startpoint: U_ALU/ALU_OUT_reg[0]
+  Startpoint: U_ALU/ALU_OUT_reg[8]
               (rising edge-triggered flip-flop clocked by ALU_CLK)
-  Endpoint: U_ALU/ALU_OUT_reg[1]
+  Endpoint: U_ALU/ALU_OUT_reg[9]
             (rising edge-triggered flip-flop clocked by ALU_CLK)
   Path Group: ALU_CLK
   Path Type: max
@@ -23,15 +23,15 @@ Wire Load Model Mode: top
   -----------------------------------------------------------
   clock ALU_CLK (rise edge)                0.00       0.00
   clock network delay (ideal)              0.00       0.00
-  U_ALU/ALU_OUT_reg[0]/CK (SDFFRQX1M)      0.00       0.00 r
-  U_ALU/ALU_OUT_reg[0]/Q (SDFFRQX1M)       0.41       0.41 f
-  U_ALU/ALU_OUT_reg[1]/SI (SDFFRQX1M)      0.00       0.41 f
+  U_ALU/ALU_OUT_reg[8]/CK (SDFFRQX1M)      0.00       0.00 r
+  U_ALU/ALU_OUT_reg[8]/Q (SDFFRQX1M)       0.41       0.41 f
+  U_ALU/ALU_OUT_reg[9]/SI (SDFFRQX1M)      0.00       0.41 f
   data arrival time                                   0.41
 
   clock ALU_CLK (rise edge)               20.00      20.00
   clock network delay (ideal)              0.00      20.00
   clock uncertainty                       -0.20      19.80
-  U_ALU/ALU_OUT_reg[1]/CK (SDFFRQX1M)      0.00      19.80 r
+  U_ALU/ALU_OUT_reg[9]/CK (SDFFRQX1M)      0.00      19.80 r
   library setup time                      -0.51      19.29
   data required time                                 19.29
   -----------------------------------------------------------
@@ -42,7 +42,7 @@ Wire Load Model Mode: top
 
 
   Startpoint: SE (input port clocked by SCAN_CLK)
-  Endpoint: U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]
+  Endpoint: U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]
             (rising edge-triggered flip-flop clocked by SCAN_CLK)
   Path Group: SCAN_CLK
   Path Type: max
@@ -53,24 +53,24 @@ Wire Load Model Mode: top
   clock network delay (ideal)                             0.00       0.00
   input external delay                                    4.00       4.00 r
   SE (in)                                                 0.80       4.80 r
-  U2355/Y (INVXLM)                                        0.54       5.34 f
-  U2375/Y (INVXLM)                                        0.79       6.13 r
-  U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]/SE (SDFFX1M)
-                                                          0.00       6.13 r
-  data arrival time                                                  6.13
+  U2265/Y (INVXLM)                                        0.54       5.35 f
+  U2283/Y (INVXLM)                                        0.79       6.14 r
+  U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]/SE (SDFFQX1M)
+                                                          0.00       6.14 r
+  data arrival time                                                  6.14
 
   clock SCAN_CLK (rise edge)                             20.00      20.00
   clock network delay (ideal)                             0.00      20.00
   clock uncertainty                                      -0.20      19.80
-  U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][5]/CK (SDFFX1M)
+  U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[0][3]/CK (SDFFQX1M)
                                                           0.00      19.80 r
-  library setup time                                     -0.66      19.14
-  data required time                                                19.14
+  library setup time                                     -0.65      19.15
+  data required time                                                19.15
   --------------------------------------------------------------------------
-  data required time                                                19.14
-  data arrival time                                                 -6.13
+  data required time                                                19.15
+  data arrival time                                                 -6.14
   --------------------------------------------------------------------------
-  slack (MET)                                                       13.02
+  slack (MET)                                                       13.01
 
 
 1
