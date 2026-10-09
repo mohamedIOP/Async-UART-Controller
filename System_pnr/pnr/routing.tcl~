@@ -1,0 +1,31 @@
+################################ Variables ####################################
+# Set to 0 for initial route, 1 for post-route refinement/ECO
+set route_0_optimze_1 0
+set max_m_layer 6
+
+################ 1. Global Net Connections & Special Route #################
+# Fixes SOCVFG-47 warning by connecting standard cell pins to P/G nets
+connectToGlobalNet VDD -type pgpin -pin VDD -inst *
+connectToGlobalNet VSS -type pgpin -pin VSS -inst *
+
+# Connect standard cell power rails (corePin)
+sroute -connect { corePin }
+
+################ 2. Global/Detailed Signal Routing #########################
+# Set common NanoRoute options for both modes
+setNanoRouteMode -quiet -routeTopRoutingLayer $max_m_layer
+setNanoRouteMode -quiet -routeWithTimingDriven true
+
+if {$route_0_optimze_1 == 0} {
+    # Full clean initial route
+    setNanoRouteMode -quiet -routeWithEco false
+    routeDesign -globalDetail -viaOpt -wireOpt
+} else {
+    # ECO / Post-route refinement mode
+    refinePlace -preserveRouting
+    setNanoRouteMode -quiet -routeWithEco true
+    routeDesign -globalDetail -viaOpt -wireOpt
+}
+
+################ 3. Verification Check #####################################
+verifyGeometry

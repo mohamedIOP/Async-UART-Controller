@@ -1,0 +1,6 @@
+setAnalysisMode -clkSrcPath true -clockPropagation sdcControl -cts postCTS -virtualIPO false
+setTrialRouteMode -handlePreroute true -keepMarkedOptRoutes true
+setOptMode -drcMargin 0 -effort high -fixDrc true -route noPreserve -rPlace true -setupTargetSlack 0
+setExtractRCMode  -engine default
+setDelayCalMode -engine default
+setPlaceMode -ignoreScan true -timingDriven true -useNP true -WLHighEffort false

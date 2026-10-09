@@ -1,0 +1,286 @@
+#######################################################
+#                                                     #
+#  Encounter Command Logging File                     #
+#  Created on Fri Oct  9 15:53:24 2026                #
+#                                                     #
+#######################################################
+
+#@(#)CDS: First Encounter v08.10-p004_1 (32bit) 11/04/2008 14:34 (Linux 2.6)
+#@(#)CDS: NanoRoute v08.10-p008 NR081027-0018/USR58-UB (database version 2.30, 67.1.1) {superthreading v1.11}
+#@(#)CDS: CeltIC v08.10-p002_1 (32bit) 10/23/2008 22:04:14 (Linux 2.6.9-67.0.10.ELsmp)
+#@(#)CDS: CTE v08.10-p016_1 (32bit) Oct 26 2008 15:11:51 (Linux 2.6.9-67.0.10.ELsmp)
+#@(#)CDS: CPE v08.10-p009
+
+setUIVar rda_Input ui_topcell SYS_TOP
+setUIVar rda_Input ui_netlist /home/ahesham/Projects/System_pnr/DFT/netlists/SYS_TOP.v
+setUIVar rda_Input ui_timelib,min /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.lib
+setUIVar rda_Input ui_timelib,max /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.lib
+setUIVar rda_Input ui_timelib /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.lib
+setUIVar rda_Input ui_leffile {/home/ahesham/Projects/System_pnr/std_cells/lef/tsmc13fsg_7lm_tech.lef /home/ahesham/Projects/System_pnr/std_cells/lef/tsmc13_m_macros.lef /home/ahesham/Projects/System_pnr/pnr/import/SYS_TOP_4.lef}
+setUIVar rda_Input ui_captbl_file /home/ahesham/Projects/System_pnr/std_cells/captables/tsmc13fsg.capTbl
+setUIVar rda_Input ui_timingcon_file /home/ahesham/Projects/System_pnr/DFT/sdc/SYS_TOP.sdc
+setUIVar rda_Input ui_pwrnet VDD
+setUIVar rda_Input ui_gndnet VSS
+commitConfig
+create_library_set -name min_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.lib"
+create_library_set -name max_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.lib"
+create_library_set -name typ_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.lib"
+create_constraint_mode -name func_mode -sdc_files {../DFT/sdc/SYS_TOP_func.sdc}
+create_constraint_mode -name scan_mode -sdc_files {../DFT/sdc/SYS_TOP_scan.sdc}
+create_constraint_mode -name capture_mode -sdc_files {../DFT/sdc/SYS_TOP_capture.sdc}
+create_rc_corner -name RCcorner -cap_table "../std_cells/captables/tsmc13fsg.capTbl"
+create_delay_corner -name min_corner -library_set min_library -rc_corner RCcorner
+create_delay_corner -name max_corner -library_set max_library -rc_corner RCcorner
+create_analysis_view -name setup1_analysis_view -delay_corner max_corner -constraint_mode func_mode
+create_analysis_view -name hold1_analysis_view  -delay_corner min_corner -constraint_mode func_mode
+create_analysis_view -name setup2_analysis_view -delay_corner max_corner -constraint_mode capture_mode
+create_analysis_view -name hold2_analysis_view  -delay_corner min_corner -constraint_mode capture_mode
+create_analysis_view -name setup3_analysis_view -delay_corner max_corner -constraint_mode scan_mode
+create_analysis_view -name hold3_analysis_view  -delay_corner min_corner -constraint_mode scan_mode
+set_analysis_view -setup {setup1_analysis_view setup2_analysis_view setup3_analysis_view } \
+                  -hold { hold1_analysis_view hold2_analysis_view hold3_analysis_view}
+floorPlan -d 240.47 160.47 6.0 6.0 6.0 6.0
+addRing -spacing_bottom 0.5 -width_left 1 -width_bottom 1 -width_top 1 -spacing_top 0.5 -layer_bottom METAL5 -stacked_via_top_layer METAL7 -width_right 1 -around core -jog_distance 0.205 -offset_bottom 0.25 -layer_top METAL5 -threshold 0.205 -offset_left 0.25 -spacing_right 0.5 -spacing_left 0.5 -offset_right 0.25 -offset_top 0.25 -layer_right METAL6 -nets {VSS VDD } -stacked_via_bottom_layer METAL1 -layer_left METAL6
+selectWire 3.4000 3.4000 236.8600 4.4000 5 VDD
+deleteSelectedFromFPlan
+selectWire 4.9000 4.9000 235.3600 5.9000 5 VSS
+deleteSelectedFromFPlan
+selectWire 4.9000 4.9000 5.9000 153.7700 6 VSS
+deleteSelectedFromFPlan
+selectWire 3.4000 3.4000 4.4000 155.2700 6 VDD
+deleteSelectedFromFPlan
+selectWire 234.3600 4.9000 235.3600 153.7700 6 VSS
+deleteSelectedFromFPlan
+zoomBox 233.167 102.344 256.690 89.609
+selectWire 235.8600 3.4000 236.8600 155.2700 6 VDD
+deleteSelectedFromFPlan
+zoomBox 2.174 160.358 134.650 120.208
+selectWire 3.4000 154.2700 236.8600 155.2700 5 VDD
+deleteSelectedFromFPlan
+selectWire 4.9000 152.7700 235.3600 153.7700 5 VSS
+deleteSelectedFromFPlan
+addRing -spacing_bottom 0.5 -width_left 1 -width_bottom 1 -width_top 1 -spacing_top 0.5 -layer_bottom METAL5 -center 1 -stacked_via_top_layer METAL7 -width_right 1 -around core -jog_distance 0.205 -offset_bottom 0.25 -layer_top METAL5 -threshold 0.205 -offset_left 0.25 -spacing_right 0.5 -spacing_left 0.5 -offset_right 0.25 -offset_top 0.25 -layer_right METAL6 -nets {VSS VDD } -stacked_via_bottom_layer METAL1 -layer_left METAL6
+addRing -spacing_bottom 0.5 -width_left 1 -width_bottom 1 -width_top 1 -spacing_top 0.5 -layer_bottom METAL5 -center 1 -stacked_via_top_layer METAL7 -width_right 1 -around core -jog_distance 0.205 -offset_bottom 0.25 -layer_top METAL5 -threshold 0.205 -offset_left 0.25 -spacing_right 0.5 -spacing_left 0.5 -offset_right 0.25 -offset_top 0.25 -layer_right METAL6 -nets {VSS VDD } -stacked_via_bottom_layer METAL1 -layer_left METAL6
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 60 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 60 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+zoomBox -19.404 68.915 59.126 42.916
+selectWire 6.1500 3.3250 7.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 7.6500 1.8250 8.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+zoomBox -13.568 157.528 44.092 143.024
+sroute -connect { blockPin padPin padRing corePin floatingStripe } -layerChangeRange { 1 7 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef -allowJogging 1 -crossoverViaBottomLayer 1 -allowLayerChange 1 -targetViaTopLayer 7 -crossoverViaTopLayer 7 -targetViaBottomLayer 1 -nets { VSS VDD }
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+saveDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_bgd_powerplan.enc
+zoomBox -10.738 84.480 87.249 34.248
+setDrawView fplan
+zoomBox -5.963 166.371 264.119 143.909
+uiSetTool obstruct
+zoomBox -2.647 163.369 254.293 147.402
+createObstruct 5.766 153.166 235.481 154.918
+uiSetTool select
+placeDesign -prePlaceOpt
+setDrawView place
+setDrawView ameba
+setDrawView fplan
+setDrawView place
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+saveDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_pre_timing.enc
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+optDesign -preCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clockDesign -genSpecOnly Clock.ctstch
+clockDesign -specFile Clock.ctstch -outDir clock_report -fixedInstBeforeCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+optDesign -postCTS -hold
+setNanoRouteMode -quiet -routeTopRoutingLayer default
+setNanoRouteMode -quiet -routeBottomRoutingLayer default
+setNanoRouteMode -quiet -drouteEndIteration default
+setNanoRouteMode -quiet -routeWithTimingDriven false
+setNanoRouteMode -quiet -routeWithSiDriven false
+routeDesign -globalDetail -wireOpt
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+uiSetTool moveWire
+clearDrc
+zoomBox -20.466 121.800 20.215 94.208
+zoomBox 225.031 50.520 260.228 12.140
+zoomBox -15.159 134.004 261.820 40.439
+verifyGeometry -noMinArea
+zoomBox 128.810 116.570 175.792 83.695
+zoomBox 153.339 99.704 159.367 95.553
+zoomBox 135.888 112.249 173.739 89.609
+zoomBox 152.337 101.636 159.235 93.501
+zoomBox 154.796 98.326 156.899 97.797
+panCenter 155.978 98.088
+panPage -1 0
+panPage 1 0
+zoomBox 131.113 112.072 174.092 88.901
+zoomBox 144.094 104.758 147.669 103.110
+setNanoRouteMode -quiet -drouteStartIteration default
+setNanoRouteMode -quiet -routeTopRoutingLayer default
+setNanoRouteMode -quiet -routeBottomRoutingLayer default
+setNanoRouteMode -quiet -drouteEndIteration default
+setNanoRouteMode -quiet -routeWithTimingDriven false
+setNanoRouteMode -quiet -routeWithSiDriven false
+routeDesign -globalDetail
+setNanoRouteMode -quiet -drouteStartIteration default
+setNanoRouteMode -quiet -routeTopRoutingLayer default
+setNanoRouteMode -quiet -routeBottomRoutingLayer default
+setNanoRouteMode -quiet -drouteEndIteration default
+setNanoRouteMode -quiet -routeWithTimingDriven false
+setNanoRouteMode -quiet -routeWithSiDriven false
+routeDesign -globalDetail
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+encMessage warning 0
+encMessage debug 0
+encMessage info 0
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_pre_timing.enc.dat SYS_TOP
+setDrawView fplan
+encMessage warning 1
+encMessage debug 0
+encMessage info 1
+setDrawView place
+setDrawView ameba
+setDrawView place
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+optDesign -preCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clockDesign -genSpecOnly Clock.ctstch
+clockDesign -specFile Clock.ctstch -outDir clock_report -fixedInstBeforeCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+optDesign -postCTS -hold
+setNanoRouteMode -quiet -drouteStartIteration default
+setNanoRouteMode -quiet -routeTopRoutingLayer default
+setNanoRouteMode -quiet -routeBottomRoutingLayer default
+setNanoRouteMode -quiet -drouteEndIteration default
+setNanoRouteMode -quiet -routeWithTimingDriven false
+setNanoRouteMode -quiet -routeWithSiDriven false
+routeDesign -globalDetail
+encMessage warning 0
+encMessage debug 0
+encMessage info 0
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_pre_timing.enc.dat SYS_TOP
+setDrawView fplan
+encMessage warning 1
+encMessage debug 0
+encMessage info 1
+setDrawView place
+optDesign -preCTS
+optDesign -postCTS -hold
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+clockDesign -genSpecOnly Clock.ctstch
+clockDesign -specFile Clock.ctstch -outDir clock_report -fixedInstBeforeCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+optDesign -postCTS -hold
+refinePlace -preserveRouting
+setNanoRouteMode -routeWithEco true
+routeDesign -globalDetail -viaOpt -wireOpt
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postRoute -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postRoute -outDir timingReports
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+encMessage warning 0
+encMessage debug 0
+encMessage info 0
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_pre_timing.enc.dat SYS_TOP
+setDrawView fplan
+encMessage warning 1
+encMessage debug 0
+encMessage info 1
+setDrawView place
+setDrawView ameba
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+optDesign -preCTS
+setDrawView place
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -idealClock -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -preCTS -hold -idealClock -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_preCTS -outDir timingReports
+clockDesign -genSpecOnly Clock.ctstch
+clockDesign -specFile Clock.ctstch -outDir clock_report -fixedInstBeforeCTS
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -pathReports -drvReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+clearClockDomains
+setClockDomains -all
+timeDesign -postCTS -hold -pathReports -slackReports -numPaths 50 -prefix SYS_TOP_postCTS -outDir timingReports
+optDesign -postCTS -hold
+connectToGlobalNet -tie_highs_lows 0 -to_global_net {} -verbose 0 -override_prior_global_connection 0 -in_instances * -nets {} -pins {} -connect Pins -under_module {}
+connectToGlobalNet -tie_highs_lows 0 -to_global_net {} -verbose 0 -override_prior_global_connection 0 -in_instances * -nets {} -pins {} -connect Pins -under_module {}
+sroute -connect { corePin }
+setNanoRouteMode -quiet -routeTopRoutingLayer 6
+setNanoRouteMode -quiet -routeWithTimingDriven true
+setNanoRouteMode -quiet -routeWithEco false
+routeDesign -globalDetail -viaOpt -wireOpt
+verifyGeometry
+verifyGeometry -report geom.rpt
+zoomBox 135.711 112.779 167.194 85.365
+zoomBox 144.269 104.813 144.380 104.868
+zoomBox 140.663 110.834 162.242 91.378

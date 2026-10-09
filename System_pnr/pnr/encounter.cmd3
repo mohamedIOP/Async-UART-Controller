@@ -1,0 +1,166 @@
+#######################################################
+#                                                     #
+#  Encounter Command Logging File                     #
+#  Created on Fri Oct  9 15:06:52 2026                #
+#                                                     #
+#######################################################
+
+#@(#)CDS: First Encounter v08.10-p004_1 (32bit) 11/04/2008 14:34 (Linux 2.6)
+#@(#)CDS: NanoRoute v08.10-p008 NR081027-0018/USR58-UB (database version 2.30, 67.1.1) {superthreading v1.11}
+#@(#)CDS: CeltIC v08.10-p002_1 (32bit) 10/23/2008 22:04:14 (Linux 2.6.9-67.0.10.ELsmp)
+#@(#)CDS: CTE v08.10-p016_1 (32bit) Oct 26 2008 15:11:51 (Linux 2.6.9-67.0.10.ELsmp)
+#@(#)CDS: CPE v08.10-p009
+
+setUIVar rda_Input ui_topcell SYS_TOP
+setUIVar rda_Input ui_netlist /home/ahesham/Projects/System_pnr/DFT/netlists/SYS_TOP.v
+setUIVar rda_Input ui_timelib,min /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.lib
+setUIVar rda_Input ui_timelib,max /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.lib
+setUIVar rda_Input ui_timelib /home/ahesham/Projects/System_pnr/std_cells/libs/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.lib
+setUIVar rda_Input ui_leffile {/home/ahesham/Projects/System_pnr/std_cells/lef/tsmc13fsg_7lm_tech.lef /home/ahesham/Projects/System_pnr/std_cells/lef/tsmc13_m_macros.lef /home/ahesham/Projects/System_pnr/pnr/import/SYS_TOP_4.lef}
+setUIVar rda_Input ui_captbl_file /home/ahesham/Projects/System_pnr/std_cells/captables/tsmc13fsg.capTbl
+setUIVar rda_Input ui_timingcon_file /home/ahesham/Projects/System_pnr/DFT/sdc/SYS_TOP.sdc
+setUIVar rda_Input ui_pwrnet VDD
+setUIVar rda_Input ui_gndnet VSS
+commitConfig
+create_library_set -name min_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_ff_1p32v_m40c.lib"
+create_library_set -name max_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_ss_1p08v_125c.lib"
+create_library_set -name typ_library -timing "../std_cells/libs/scmetro_tsmc_cl013g_rvt_tt_1p2v_25c.lib"
+create_constraint_mode -name func_mode -sdc_files {../DFT/sdc/SYS_TOP_func.sdc}
+create_constraint_mode -name scan_mode -sdc_files {../DFT/sdc/SYS_TOP_scan.sdc}
+create_constraint_mode -name capture_mode -sdc_files {../DFT/sdc/SYS_TOP_capture.sdc}
+create_rc_corner -name RCcorner -cap_table "../std_cells/captables/tsmc13fsg.capTbl"
+create_delay_corner -name min_corner -library_set min_library -rc_corner RCcorner
+create_delay_corner -name max_corner -library_set max_library -rc_corner RCcorner
+create_analysis_view -name setup1_analysis_view -delay_corner max_corner -constraint_mode func_mode
+create_analysis_view -name hold1_analysis_view  -delay_corner min_corner -constraint_mode func_mode
+create_analysis_view -name setup2_analysis_view -delay_corner max_corner -constraint_mode capture_mode
+create_analysis_view -name hold2_analysis_view  -delay_corner min_corner -constraint_mode capture_mode
+create_analysis_view -name setup3_analysis_view -delay_corner max_corner -constraint_mode scan_mode
+create_analysis_view -name hold3_analysis_view  -delay_corner min_corner -constraint_mode scan_mode
+set_analysis_view -setup {setup1_analysis_view setup2_analysis_view setup3_analysis_view } \
+                  -hold { hold1_analysis_view hold2_analysis_view hold3_analysis_view}
+floorPlan -d 240.47 160.47 6.0 6.0 6.0 6.0
+addRing -spacing_bottom 0.5 -width_left 1 -width_bottom 1 -width_top 1 -spacing_top 0.5 -layer_bottom METAL5 -center 1 -stacked_via_top_layer METAL7 -width_right 1 -around core -jog_distance 0.205 -offset_bottom 0.25 -layer_top METAL5 -threshold 0.205 -offset_left 0.25 -spacing_right 0.5 -spacing_left 0.5 -offset_right 0.25 -offset_top 0.25 -layer_right METAL6 -nets {VSS VDD } -stacked_via_bottom_layer METAL1 -layer_left METAL6
+addRing -spacing_bottom 0.5 -width_left 1 -width_bottom 1 -width_top 1 -spacing_top 0.5 -layer_bottom METAL5 -center 1 -stacked_via_top_layer METAL7 -width_right 1 -around core -jog_distance 0.205 -offset_bottom 0.25 -layer_top METAL5 -threshold 0.205 -offset_left 0.25 -spacing_right 0.5 -spacing_left 0.5 -offset_right 0.25 -offset_top 0.25 -layer_right METAL6 -nets {VSS VDD } -stacked_via_bottom_layer METAL1 -layer_left METAL6
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 40 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 40 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+zoomBox -11.799 118.616 270.310 62.725
+zoomBox -7.908 136.480 63.371 114.371
+selectWire 6.1500 3.3250 7.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 7.6500 1.8250 8.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+selectWire 46.1500 3.3250 47.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 47.6500 1.8250 48.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+panPage 1 0
+panPage 1 0
+panPage -1 0
+panPage -1 0
+panPage 1 0
+windowSelect 84.410 133.950 93.032 133.334
+selectWire 86.1500 3.3250 87.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 87.6500 1.8250 88.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+selectWire 126.1500 3.3250 127.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 127.6500 1.8250 128.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+panPage 1 0
+panPage 1 0
+panPage -1 0
+selectWire 166.1500 3.3250 167.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 167.6500 1.8250 168.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+selectWire 206.1500 3.3250 207.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 207.6500 1.8250 208.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 60 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+addStripe -block_ring_top_layer_limit METAL7 -max_same_layer_jog_length 0.8 -padcore_ring_bottom_layer_limit METAL5 -set_to_set_distance 60 -stacked_via_top_layer METAL7 -padcore_ring_top_layer_limit METAL7 -spacing 0.5 -merge_stripes_value 0.205 -layer METAL6 -block_ring_bottom_layer_limit METAL5 -width 1 -nets {VSS VDD } -stacked_via_bottom_layer METAL1
+zoomBox -9.677 108.358 83.888 75.460
+selectWire 6.1500 3.3250 7.1500 156.2450 6 VSS
+deleteSelectedFromFPlan
+selectWire 7.6500 1.8250 8.6500 157.7450 6 VDD
+deleteSelectedFromFPlan
+zoomBox -3.840 162.834 34.188 135.950
+panPage 1 0
+panPage 1 0
+panPage 1 0
+panPage 1 0
+panPage 1 0
+panPage 0 -1
+panPage -1 0
+panPage 1 0
+saveDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan.enc
+sroute -connect { blockPin padPin padRing corePin floatingStripe } -layerChangeRange { 1 7 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef -allowJogging 1 -crossoverViaBottomLayer 1 -allowLayerChange 1 -targetViaTopLayer 7 -crossoverViaTopLayer 7 -targetViaBottomLayer 1 -nets { VSS VDD }
+sroute -connect { blockPin padPin padRing corePin floatingStripe } -layerChangeRange { 1 7 } -blockPinTarget { nearestRingStripe nearestTarget } -padPinPortConnect { allPort oneGeom } -checkAlignedSecondaryPin 1 -blockPin useLef -allowJogging 1 -crossoverViaBottomLayer 1 -allowLayerChange 1 -targetViaTopLayer 7 -crossoverViaTopLayer 7 -targetViaBottomLayer 1 -nets { VSS VDD }
+zoomBox 63.901 134.358 175.684 73.691
+saveDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan_1.enc
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+setDrawView fplan
+uiSetTool obstruct
+uiSetTool select
+uiSetTool move
+uiSetTool select
+zoomBox -9.854 163.011 278.092 148.154
+zoomBox -4.878 165.534 245.487 141.572
+panPage 0 -1
+zoomBox -2.146 31.718 13.908 20.218
+zoomBox -6.493 165.310 269.956 148.154
+zoomBox -4.984 162.641 253.236 145.041
+windowSelect 5.937 155.132 235.387 152.079
+deselectAll
+uiSetTool obstruct
+zoomBox 5.819 155.250 235.270 151.845
+uiSetTool select
+zoomBox -6.670 165.133 256.514 144.970
+uiSetTool obstruct
+createObstruct 5.897 151.581 235.210 155.052
+zoomBox -2.481 164.028 242.631 144.041
+zoomBox 91.847 162.126 141.017 129.935
+panCenter 113.609 150.965
+zoomBox 105.884 150.965 113.013 151.061
+zoomBox -7.200 161.418 250.854 145.677
+encMessage warning 0
+encMessage debug 0
+encMessage info 0
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan_1.enc.dat SYS_TOP
+setDrawView fplan
+encMessage warning 1
+encMessage debug 0
+encMessage info 1
+uiSetTool select
+zoomBox -3.133 163.011 251.915 137.541
+uiSetTool obstruct
+createObstruct 6.261 152.944 234.982 155.031
+placeDesign -prePlaceOpt
+placeDesign -prePlaceOpt
+addTieHiLo -cell TIELOM -prefix LTIE
+addTieHiLo -cell TIEHIM -prefix HTIE
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+setDrawView place
+setDrawView ameba
+setDrawView place
+encMessage warning 0
+encMessage debug 0
+encMessage info 0
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan_1.enc.dat SYS_TOP
+setDrawView fplan
+encMessage warning 1
+encMessage debug 0
+encMessage info 1
+verifyConnectivity -type all -noAntenna -error 1000 -warning 50
+verifyGeometry -noMinArea
+zoomBox -8.793 164.779 267.480 131.704
+setDrawView fplan
+uiSetTool obstruct
+createObstruct 5.780 153.016 234.815 155.025
+placeDesign -prePlaceOpt
+setDrawView place
+setDrawView ameba
+setDrawView place

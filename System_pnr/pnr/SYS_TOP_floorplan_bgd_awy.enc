@@ -1,0 +1,8 @@
+################################################
+#                                              #
+# Silicon Perspective, A Cadence Company       #
+# FirstEncounter Design Restore script         #
+#    for design session: /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan_bgd_awy.enc                     
+#                                              #
+################################################
+restoreDesign /home/ahesham/Projects/System_pnr/pnr/SYS_TOP_floorplan_bgd_awy.enc.dat SYS_TOP

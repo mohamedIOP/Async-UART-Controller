@@ -1,0 +1,4 @@
+setAnalysisMode -clkSrcPath true -clockPropagation sdcControl -cts postCTS -virtualIPO false
+setExtractRCMode  -engine default
+setDelayCalMode -engine default
+setPlaceMode -ignoreScan true -timingDriven true
