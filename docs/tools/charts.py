@@ -34,8 +34,8 @@ def save(fig, name):
 def area_power():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(10.5, 4.4), gridspec_kw={"width_ratios": [1.25, 1]})
     stages = ["Post-synthesis", "Post-DFT"]
-    comb = [10970.37, 10479.69]
-    seq = [8947.63, 11396.34]
+    comb = [10970.37, 10571.47]
+    seq = [8947.63, 11452.82]
     x = [0, 1]
     b1 = a1.bar(x, comb, 0.5, color=BLUE, label="Combinational", bottom=None)
     b2 = a1.bar(x, seq, 0.5, bottom=comb, color=ORANGE, label="Sequential", edgecolor="white", linewidth=2)
@@ -43,7 +43,7 @@ def area_power():
         a1.text(i, comb[i] / 2, f"{comb[i]:,.0f}", ha="center", va="center", color="white", fontweight="bold")
         a1.text(i, comb[i] + seq[i] / 2, f"{seq[i]:,.0f}", ha="center", va="center", color="white", fontweight="bold")
         a1.text(i, comb[i] + seq[i] + 450, f"{comb[i] + seq[i]:,.0f}", ha="center", va="bottom", fontweight="bold")
-    a1.annotate("+9.83 %", xy=(0.5, 20500), xytext=(0.5, 20500), ha="center", color=INK2, fontsize=11, fontweight="bold")
+    a1.annotate("+10.6 %", xy=(0.5, 20500), xytext=(0.5, 20500), ha="center", color=INK2, fontsize=11, fontweight="bold")
     a1.set_xticks(x, stages)
     a1.set_ylim(0, 29500)
     a1.set_title("Cell area (library units)", loc="left", fontweight="bold", fontsize=12)
@@ -52,7 +52,7 @@ def area_power():
     a1.spines["left"].set_visible(False)
     a1.tick_params(left=False)
 
-    pw = [0.227, 0.387]
+    pw = [0.227, 0.385]
     a2.bar(x, pw, 0.5, color=[BLUE, ORANGE])
     for i in x:
         a2.text(i, pw[i] + 0.012, f"{pw[i]:.3f} mW", ha="center", va="bottom", fontweight="bold")
@@ -93,7 +93,7 @@ def slack():
 def dft():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.2), gridspec_kw={"width_ratios": [1.35, 1]})
     cats = ["Detected", "ATPG-untestable", "Undetectable", "Not detected"]
-    vals = [15939, 81, 36, 2]
+    vals = [16014, 87, 37, 2]
     cols = [BLUE, ORANGE, ORANGE, ORANGE]
     y = range(4)
     a1.barh(y, vals, 0.55, color=cols)
@@ -104,23 +104,23 @@ def dft():
     a1.set_yticks(list(y), cats)
     a1.invert_yaxis()
     a1.set_xlabel("Number of stuck-at faults (log scale)")
-    a1.set_title("Fault coverage 99.48 %  (16,058 faults)", loc="left", fontweight="bold", fontsize=12.5)
+    a1.set_title("Test coverage 99.45 %  (16,140 faults)", loc="left", fontweight="bold", fontsize=12.5)
     style_grid(a1, "x")
     a1.spines["left"].set_visible(False)
     a1.tick_params(left=False)
 
-    chains = ["SI[2] → SO[2]", "SI[1] → SO[1]", "SI[0] → SO[0]", "test_si4 → RF_STP_ERR"]
-    ln = [89, 89, 88, 88]
+    chains = ["SI[3] → SO[3]", "SI[2] → SO[2]", "SI[1] → SO[1]", "SI[0] → SO[0]"]
+    ln = [91, 90, 90, 90]
     a2.barh(range(4), ln, 0.55, color=AQUA)
     for i, v in enumerate(ln):
         a2.text(v + 1.5, i, f"{v}", va="center", fontweight="bold")
     a2.axvline(100, color=RED if False else MUTED, linestyle=(0, (4, 3)), linewidth=1.3)
-    a2.text(99, 3.62, "max_length 100", ha="right", va="center", color=INK2, fontsize=9.5)
+    a2.text(99, 1.5, "max_length 100", ha="right", va="center", color=INK2, fontsize=9.5)
     a2.set_yticks(range(4), chains)
     a2.set_xlim(0, 110)
     a2.invert_yaxis()
     a2.set_xlabel("Scan cells per chain")
-    a2.set_title("4 balanced scan chains (354 cells)", loc="left", fontweight="bold", fontsize=12.5)
+    a2.set_title("4 balanced scan chains (361 cells)", loc="left", fontweight="bold", fontsize=12.5)
     style_grid(a2, "x")
     a2.spines["left"].set_visible(False)
     a2.tick_params(left=False)
@@ -181,8 +181,8 @@ def timeline():
 # ------------------------------------------------------------ 6. DFT cell mix
 def cellmix():
     fig, ax = plt.subplots(figsize=(9.5, 3.9))
-    names = ["SDFFRQX1M  (scan, async reset)", "SDFFX1M  (scan)", "DFFRQX1M  (non-scan)", "SDFFRQX2M", "SDFFSQX2M", "SDFFSQX1M", "DFFRQX2M", "TLATNCAX12M  (clock-gate latch)"]
-    vals = [272, 64, 10, 4, 2, 1, 1, 1]
+    names = ["SDFFRQX1M  (scan, async reset)", "SDFFQX1M  (scan)", "DFFRQX1M  (non-scan)", "SDFFRQX2M", "SDFFSQX2M", "SDFFSQX1M", "DFFRQX2M", "TLATNX1M  (clock-gate latch)"]
+    vals = [279, 64, 10, 4, 2, 1, 1, 1]
     cols = [AQUA, AQUA, YELLOW, AQUA, AQUA, AQUA, YELLOW, VIOLET]
     ax.barh(range(8), vals, 0.6, color=cols)
     ax.set_xscale("log")
@@ -201,6 +201,52 @@ def cellmix():
     save(fig, "chart_cell_mix.png")
 
 
+# ------------------------------------------------------------ 7. PnR timing
+def pnr_timing():
+    import numpy as np
+    fig, ax = plt.subplots(figsize=(9.5, 4.0))
+    stages = ["Pre-CTS", "Post-CTS", "Post-route"]
+    setup = [0.268, 0.352, 0.450]
+    hold = [0.072, 0.029, 0.030]
+    x = np.arange(3)
+    w = 0.34
+    ax.bar(x - w / 2, setup, w, color=BLUE, label="Setup WNS")
+    ax.bar(x + w / 2, hold, w, color=ORANGE, label="Hold WNS")
+    for i in range(3):
+        ax.text(x[i] - w / 2, setup[i] + 0.012, f"{setup[i]:.3f}", ha="center", fontweight="bold")
+        ax.text(x[i] + w / 2, hold[i] + 0.012, f"{hold[i]:.3f}", ha="center", fontweight="bold")
+    ax.set_xticks(x, stages)
+    ax.set_ylim(0, 0.55)
+    ax.set_ylabel("Worst negative slack, ns  (positive = met)")
+    ax.set_title("Timing through place and route  —  0 violating paths at every stage", loc="left", fontweight="bold", fontsize=12.5)
+    ax.legend(frameon=False, loc="upper left")
+    style_grid(ax, "y")
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(left=False)
+    save(fig, "chart_pnr_timing.png")
+
+
+# ------------------------------------------------------------ 8. PnR power by clock
+def pnr_power():
+    fig, ax = plt.subplots(figsize=(9.5, 3.9))
+    names = ["SCAN_CLK", "REF_CLK", "ALU_CLK", "UART_CLK", "RX_CLK", "TX_CLK"]
+    vals = [0.4775, 0.2591, 0.03615, 0.009032, 0.001732, 0.0002727]
+    share = [50.86, 27.59, 3.85, 0.962, 0.1845, 0.02905]
+    ax.barh(range(6), vals, 0.55, color=BLUE)
+    ax.set_xscale("log")
+    ax.set_xlim(1e-4, 3)
+    for i, (v, p) in enumerate(zip(vals, share)):
+        ax.text(v * 1.25, i, f"{v:.4g} mW  ({p:.2f} %)", va="center", fontweight="bold")
+    ax.set_yticks(range(6), names)
+    ax.invert_yaxis()
+    ax.set_xlabel("Power attributed to each clock network, mW (log scale)")
+    ax.set_title("Post-route power by clock  (total 0.939 mW, ss corner, input activity 0.2)", loc="left", fontweight="bold", fontsize=12.5)
+    style_grid(ax, "x")
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(left=False)
+    save(fig, "chart_pnr_power.png")
+
+
 if __name__ == "__main__":
     area_power()
     slack()
@@ -208,3 +254,5 @@ if __name__ == "__main__":
     cdc()
     timeline()
     cellmix()
+    pnr_timing()
+    pnr_power()

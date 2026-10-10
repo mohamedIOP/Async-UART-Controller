@@ -250,8 +250,8 @@ def regmap():
 
 # ---------------------------------------------------------------- backend flow
 def flow():
-    s = Svg(1240, 470, "Design and verification flow")
-    s.text(20, 30, "From RTL to verified netlist", 16, INK, weight="bold")
+    s = Svg(1240, 560, "Design and verification flow")
+    s.text(20, 30, "From RTL to a routed layout", 16, INK, weight="bold")
 
     def stage(x, y, w, title, tool, result, ok=True, dashed=False):
         s.rect(x, y, w, 76, "#ffffff", AQUA if ok and not dashed else MUTED, 2, 12, "6 4" if dashed else None)
@@ -259,25 +259,75 @@ def flow():
         s.text(x + 14, y + 43, tool, 11, INK2)
         s.text(x + 14, y + 63, result, 12, GREEN if ok and not dashed else MUTED, weight="bold")
 
-    s.box(20, 170, 130, 120, "RTL", T_BLUE, BLUE, 20, ["31 Verilog / SV", "files"])
-    # rows
-    rows = [70, 160, 250, 340]
-    # Track A
-    stage(250, rows[0], 300, "Functional simulation", "ModelSim · SYS_TB.sv", "5 / 5 test cases pass")
-    stage(250, rows[1], 300, "Lint + CDC sign-off", "SpyGlass L-2016.06 · 7 goals", "0 unsynchronized crossings")
-    stage(250, rows[2], 300, "Logic synthesis", "Design Compiler O-2018.06-SP1", "19 918 area · 0.227 mW · no violations")
-    stage(250, rows[3], 300, "Scan insertion (DFT)", "DC · 4 mux-D scan chains", "99.48 % fault coverage")
+    s.box(20, 215, 130, 120, "RTL", T_BLUE, BLUE, 20, ["32 Verilog / SV", "files"])
+    rows = [70, 160, 250, 340, 430]
+    stage(250, rows[0], 320, "Functional simulation", "ModelSim · SYS_TB.sv", "5 / 5 test cases pass")
+    stage(250, rows[1], 320, "Lint + CDC sign-off", "SpyGlass L-2016.06 · 7 goals", "0 unsynchronized crossings")
+    stage(250, rows[2], 320, "Logic synthesis", "Design Compiler O-2018.06-SP1", "19 918 area · 0.227 mW · no violations")
+    stage(250, rows[3], 320, "Scan insertion (DFT)", "DC · 4 mux-D scan chains", "99.45 % test coverage")
+    stage(250, rows[4], 320, "Place and route", "Cadence First Encounter 08.10", "0 DRC · setup +0.450 · hold +0.030 ns")
     for y in rows[:3]:
-        s.line([(150, 230), (200, 230), (200, y + 38), (250, y + 38)], INK2, 1.8)
-    s.line([(400, rows[2] + 76), (400, rows[3])], INK2, 1.8)
-    stage(660, rows[2], 330, "Formality: RTL vs gate netlist", "Formality L-2016.03-SP1", "358 / 358 compare points pass")
-    stage(660, rows[3], 330, "Formality: RTL vs scan netlist", "test_mode = 0, SE = 0", "358 / 358 compare points pass")
-    s.line([(550, rows[2] + 38), (660, rows[2] + 38)], INK2, 1.8)
-    s.line([(550, rows[3] + 38), (660, rows[3] + 38)], INK2, 1.8)
-    stage(1060, rows[3], 160, "Post-PnR", "template only", "not run", dashed=True)
-    s.line([(990, rows[3] + 38), (1060, rows[3] + 38)], MUTED, 1.4, "4 3")
-    s.text(660, 440, "Netlists, SDC / SDF, reports and logs for every step are kept under Backend/.", 12, INK2, italic=True)
+        s.line([(150, 275), (200, 275), (200, y + 38), (250, y + 38)], INK2, 1.8)
+    s.line([(410, rows[2] + 76), (410, rows[3])], INK2, 1.8)
+    s.line([(410, rows[3] + 76), (410, rows[4])], INK2, 1.8)
+    stage(680, rows[2], 340, "Formality: RTL vs gate netlist", "Formality L-2016.03-SP1", "358 / 358 compare points pass")
+    stage(680, rows[3], 340, "Formality: RTL vs scan netlist", "test_mode = 0, SE = 0", "365 / 365 compare points pass")
+    stage(680, rows[4], 340, "Formality: RTL vs routed netlist", "script is an empty template", "not run", dashed=True)
+    s.line([(570, rows[2] + 38), (680, rows[2] + 38)], INK2, 1.8)
+    s.line([(570, rows[3] + 38), (680, rows[3] + 38)], INK2, 1.8)
+    s.line([(570, rows[4] + 38), (680, rows[4] + 38)], MUTED, 1.4, "4 3")
+    s.text(20, 535, "Netlists, SDC / SDF, reports and logs for every step are kept under Backend/, System_pnr/ and PnR/.", 12, INK2, italic=True)
     s.save(OUT + "design_flow.svg")
+
+
+# ---------------------------------------------------------------- PnR flow
+def pnr_flow():
+    s = Svg(1290, 470, "Place-and-route flow")
+    s.text(20, 30, "Place and route in Cadence First Encounter  (System_pnr/pnr/*.tcl)", 16, INK, weight="bold")
+    steps = [
+        ("1  Import", T_BLUE, BLUE, "des_import.tcl",
+         ["scan netlist + SDC", "3 modes: func, scan,", "capture", "2 corners: ss / ff"], None),
+        ("2  Floorplan", T_BLUE, BLUE, "floorplan.tcl",
+         ["240.47 x 160.47 um", "6 um margins", "VDD / VSS rings", "METAL6 stripes"], None),
+        ("3  Placement", T_AQUA, AQUA, "placement.tcl",
+         ["placeDesign", "-inPlaceOpt", "tie-hi / tie-lo cells"], "setup +0.268 · hold +0.072"),
+        ("4  Clock tree", T_YELLOW, YELLOW, "cts.tcl",
+         ["clockDesign", "trees: scan_clk,", "UART_CLK, REF_CLK"], "setup +0.352 · hold +0.029"),
+        ("5  Routing", T_ORANGE, ORANGE, "routing.tcl",
+         ["NanoRoute global +", "detail, ECO refine", "wire / via optimize"], "setup +0.450 · hold +0.030"),
+        ("6  Finish", T_VIOLET, VIOLET, "chip_finish.tcl",
+         ["2 072 filler cells", "FILL1M ... FILL64M"], "DRC / conn. / antenna clean"),
+        ("7  Outputs", T_GREY, INK2, "outputs_gen.tcl",
+         ["netlist (+ PG pins)", "SPF, SDF, GDS", "power report"], None),
+    ]
+    w, pitch, x0, y0 = 160, 176, 20, 70
+    for i, (title, fill, stroke, script, lines, result) in enumerate(steps):
+        x = x0 + i * pitch
+        s.rect(x, y0, w, 210, fill, stroke, 2, 12)
+        s.text(x + 12, y0 + 26, title, 15, INK, weight="bold")
+        s.text(x + 12, y0 + 46, script, 11, INK2, family="Menlo, Consolas, monospace")
+        s.line([(x + 10, y0 + 56), (x + w - 10, y0 + 56)], stroke, 1, arrow=False)
+        for j, ln in enumerate(lines):
+            s.text(x + 12, y0 + 78 + j * 18, ln, 12, INK)
+        if result:
+            s.text(x + 12, y0 + 180, "WNS (ns)" if i != 5 else "verify", 10.5, INK2)
+            s.text(x + 12, y0 + 196, result, 10.5, "#1d6b3c", weight="bold")
+        if i < len(steps) - 1:
+            s.line([(x + w, y0 + 105), (x + pitch, y0 + 105)], INK2, 1.8)
+    s.rect(20, 305, 1250, 135, T_GREY, "#c9c8c3", 1, 12)
+    s.text(36, 332, "Sign-off checks after routing", 14.5, INK, weight="bold")
+    items = [
+        ("verifyGeometry", "No DRC violations found"),
+        ("verifyConnectivity", "Found no problems or warnings"),
+        ("verifyProcessAntenna", "No violations found"),
+        ("timeDesign", "0 violating paths, 0 DRV nets"),
+    ]
+    for i, (cmd, res) in enumerate(items):
+        x = 36 + i * 310
+        s.text(x, 362, cmd, 12.5, INK, weight="bold", family="Menlo, Consolas, monospace")
+        s.text(x, 382, res, 12.5, "#1d6b3c", weight="bold")
+    s.text(36, 418, "Clock-tree skew against the 200 ps target: scan_clk 236.5 ps, UART_CLK 216.5 ps, REF_CLK 92.7 ps (setup views).", 12, INK2, italic=True)
+    s.save(OUT + "pnr_flow.svg")
 
 
 if __name__ == "__main__":
@@ -286,3 +336,4 @@ if __name__ == "__main__":
     commands()
     regmap()
     flow()
+    pnr_flow()

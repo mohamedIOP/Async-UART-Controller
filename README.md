@@ -1,6 +1,6 @@
 # Async-UART-Controller
 
-A multi-clock-domain digital system written in Verilog/SystemVerilog. A host talks to it over a UART link; the system decodes command frames, reads and writes a register file, runs arithmetic and logic operations on an ALU, and sends the results back over UART. The design crosses between two asynchronous clock domains using dedicated CDC structures and is taken through simulation, synthesis, DFT scan insertion, formal equivalence checking and CDC/lint sign-off.
+A multi-clock-domain digital system written in Verilog/SystemVerilog. A host talks to it over a UART link; the system decodes command frames, reads and writes a register file, runs arithmetic and logic operations on an ALU, and sends the results back over UART. The design crosses between two asynchronous clock domains using dedicated CDC structures and is taken through simulation, synthesis, DFT scan insertion, place and route, formal equivalence checking and CDC/lint sign-off.
 
 ---
 
@@ -36,7 +36,7 @@ A multi-clock-domain digital system written in Verilog/SystemVerilog. A host tal
 - **ALU with 15 functions** (add, subtract, multiply, divide, bitwise, compare, shifts) and a **clock-gated** clock so it only toggles when enabled.
 - **Asynchronous FIFO** (8 entries, Gray-coded pointers, 2-flop synchronizers) for the response path.
 - **Dedicated CDC blocks**: data synchronizer with enable handshake, reset synchronizers, pulse generator.
-- **Full backend verification**: ModelSim testbench (5/5 pass), Design Compiler synthesis, DFT scan insertion (99.48 % fault coverage), Formality equivalence (all points pass) and SpyGlass lint/CDC.
+- **Full backend flow**: ModelSim testbench (5/5 pass), Design Compiler synthesis, DFT scan insertion (99.45 % test coverage), Cadence place and route (DRC, connectivity and antenna clean, setup and hold met), Formality equivalence (all compare points pass) and SpyGlass lint/CDC.
 
 ---
 
@@ -88,7 +88,8 @@ Async-UART-Controller/
 │   ├── RST_SYNC/RST_SYNC.v
 │   ├── RegFile/RegFile.v
 │   ├── SYS_CTRL/SYS_CTRL.v
-│   ├── SYS_TOP/                     # SYS_TOP.v (functional top), SYS_TOP_dft.v (DFT-ready top)
+│   ├── SYS_TOP/                     # SYS_TOP.v (functional top), SYS_TOP_dft.v (DFT-ready top),
+│   │                                # SYS_TOP_dft_pnr.v (DFT top with renamed ports for place and route)
 │   ├── mux2X1/mux2X1.v
 │   └── UART/
 │       ├── UART_TOP/UART.v
@@ -111,14 +112,21 @@ Async-UART-Controller/
 │       ├── post-syn/                # RTL vs post-synthesis netlist
 │       ├── post-dft/                # RTL vs post-DFT netlist
 │       └── post-PnR/                # template only (not populated)
+├── System_pnr/
+│   ├── DFT/                         # DFT run on SYS_TOP_dft_pnr.v: netlist, SDC for 3 modes, SDF, SVF, reports
+│   ├── pnr/                         # Encounter project: des_import / floorplan / placement / cts /
+│   │                                # routing / chip_finish / outputs_gen .tcl, saved .enc databases, logs
+│   └── std_cells/                   # library, LEF and cap-table inputs used by the PnR flow
+├── PnR/                             # exported PnR results: netlist, SDF, SPF, GDS, timing reports
 └── Results/
     ├── ModelSim waveform exports (TC1 – TC5)
     ├── SYS_TOP_Project_Report.pdf / .docx    # 23-page project report
     ├── Synthesis.png, TB_Transcript.png
+    ├── Layout/                               # Layout.png and Encounter screenshots (floorplan, placement, amoeba)
     └── Spyglass_Results/consolidated_reports/
 ```
 
-Total RTL + testbench: roughly 1,950 lines across 31 source files.
+Total RTL + testbench: roughly 2,250 lines across 32 source files.
 
 ---
 
@@ -173,7 +181,7 @@ An asynchronous, active-low `RST` is brought into each domain through a 2-flop `
 
 ## 5. Top-level interface
 
-Module `SYS_TOP` (functional) and `SYS_TOP_dft` (adds scan ports).
+Module `SYS_TOP` (functional), `SYS_TOP_dft` (adds scan ports) and `SYS_TOP_dft_pnr` (same as the DFT version, with renamed functional ports for place and route).
 
 | Port | Dir | Description |
 |---|---|---|
@@ -185,7 +193,9 @@ Module `SYS_TOP` (functional) and `SYS_TOP_dft` (adds scan ports).
 | `RF_PAR_ERR` | out | parity error flag from the receiver |
 | `RF_STP_ERR` | out | stop-bit error flag from the receiver |
 
-DFT version adds: `SCAN_CLK`, `scan_rst` (active-low), `test_mode`, `SE` (scan enable), `SI[2:0]` / `test_si4` (scan inputs), `SO[2:0]` (scan outputs; the 4th chain shares `RF_STP_ERR`).
+The DFT version adds `scan_clk`, `scan_rst` (active-low), `test_mode`, `SE` (scan enable), `SI[3:0]` (scan inputs) and `SO[3:0]` (scan outputs), one pair per scan chain (`NUM_OF_CHAINS = 4`).
+
+The place-and-route top `SYS_TOP_dft_pnr.v` renames the functional ports to `RST_N`, `UART_RX_IN`, `UART_TX_O`, `parity_error` and `framing_error`; everything else is identical.
 
 ---
 
@@ -308,7 +318,7 @@ The sampled bit and the three checks fire at `edge_cnt == middle + 2`. `data_val
 ## 9. Block-by-block description
 
 ### `SYS_TOP` / `SYS_TOP_dft`
-Top-level integration of every block, clock/reset distribution, and the `CLKDIV_MUX` / `mux2X1` wiring. `SYS_TOP_dft` is the same design with scan ports and the scan-mode clock/reset multiplexers (`mux2X1`) so that all flops can be clocked and reset from `SCAN_CLK` / `scan_rst` in test mode.
+Top-level integration of every block, clock/reset distribution, and the `CLKDIV_MUX` / `mux2X1` wiring. `SYS_TOP_dft` is the same design with scan ports and the scan-mode clock/reset multiplexers (`mux2X1`) so that all flops can be clocked and reset from `scan_clk` / `scan_rst` in test mode. `SYS_TOP_dft_pnr` is the same netlist structure with the port renames listed in [section 5](#5-top-level-interface).
 
 ### `SYS_CTRL`
 Central FSM in the `REF_CLK` domain. Decodes opcodes, drives register-file and ALU control signals as one-cycle pulses and pushes response bytes into the FIFO. See [section 11](#11-sys_ctrl-state-machine).
@@ -541,7 +551,7 @@ The original ModelSim exports (both pages per test case) are kept in `Results/`;
 
 ## 14. Backend flow and results
 
-All backend scripts live in `Backend/`. SpyGlass runs on the RTL; synthesis and scan insertion each have their own equivalence check against the RTL.
+Synthesis, DFT and Formality scripts live in `Backend/`; the final DFT run and the place-and-route project live in `System_pnr/`, with the exported layout results in `PnR/`. SpyGlass runs on the RTL; synthesis and scan insertion each have their own equivalence check against the RTL, and the routed netlist's check is still a template.
 
 <p align="center">
   <img src="docs/images/generated/design_flow.svg" alt="Design and verification flow from RTL to verified netlist" width="950">
@@ -599,9 +609,9 @@ Tool: Synopsys Design Compiler O-2018.06-SP1, flow `run_syn.sh` → `dc_shell -f
 
 Hold slack across the design: 0.34 – 0.73 ns, all met. The log contains 47 benign LINT warnings (LINT-1, 31, 32, 33, 52).
 
-### 14.2 DFT scan insertion (`Backend/DFT`)
+### 14.2 DFT scan insertion (`Backend/DFT`, `System_pnr/DFT`)
 
-Style: multiplexed-flip-flop scan, no clock mixing. Script commands include `set_scan_configuration -chain_count 3 -clock_mixing no_mix -style multiplexed_flip_flop -replace true -max_length 100`, then `compile_ultra -scan`, `dft_drc`, `insert_dft`.
+Style: multiplexed-flip-flop scan, no clock mixing. The script runs `set_scan_configuration -clock_mixing no_mix -style multiplexed_flip_flop -replace true -max_length 100` (the chain count is no longer forced), then `compile_ultra -scan`, `dft_drc` and `insert_dft`. With the 100-cell limit Design Compiler builds **four** chains, and the top module now declares `NUM_OF_CHAINS = 4` so that the scan ports match (an earlier run declared three scan ports while four chains were built, which produced an extra `test_si4` port; that was fixed in commit `c9dd32c`).
 
 **DFT signals**
 
@@ -611,43 +621,48 @@ Style: multiplexed-flip-flop scan, no clock mixing. Script commands include `set
 | `scan_rst` | Reset, active-low |
 | `test_mode` | Constant / TestMode, active-high |
 | `SE` | ScanEnable, active-high |
-| `SI` | ScanDataIn |
-| `SO` | ScanDataOut |
+| `SI[3:0]` | ScanDataIn, one per chain |
+| `SO[3:0]` | ScanDataOut, one per chain |
 
-**Scan chains (final run)** – four chains, because the 100-cell max length is exceeded by 3 chains:
+**Scan chains (`Backend/DFT/log/dft.log`)**
 
 | Chain | In → Out | Cells | First cell |
 |---|---|---|---|
-| 1 | `SI[2]` → `SO[2]` | 89 | `RST_SYNC_1/Synchronizer_reg[0]` |
-| 2 | `SI[1]` → `SO[1]` | 89 | FIFO `RAM_reg[5][7]` |
-| 3 | `SI[0]` → `SO[0]` | 88 | `regArr_reg[3][4]` |
-| 4 | `test_si4` → `RF_STP_ERR` | 88 | `regArr_reg[14][4]` |
+| 1 | `SI[3]` → `SO[3]` | 91 | `RST_SYNC_1/Synchronizer_reg[0]` |
+| 2 | `SI[2]` → `SO[2]` | 90 | `U_ASYNC_FIFO/FIFO_Memory_Block/RAM_reg[6][1]` |
+| 3 | `SI[1]` → `SO[1]` | 90 | `U_RegFile/regArr_reg[3][1]` |
+| 4 | `SI[0]` → `SO[0]` | 90 | `U_RegFile/regArr_reg[14][3]` |
 
 **Coverage and cell stats**
 
 | Metric | Value |
 |---|---|
-| Sequential cells | 355 (343 scannable, 11 non-scan shift-register cells) |
-| DRC violations | 1 – `TEST-505` (clock-gate latch constant 1, expected) |
-| Faults (uncollapsed) | 16,058 |
-| Detected | 15,939 |
-| ATPG-untestable | 81 |
-| Undetectable | 36 |
+| Sequential cells in the netlist | 362 (350 scan flops, 11 plain flops, 1 clock-gate latch); the DC area report counts 364 |
+| Cells in chains | 361 |
+| DRC violations before insertion | 2 – `TEST-126` (clock-gate latch not scannable) and `TEST-505` (latch constant 1) |
+| DRC violations after insertion | 1 – `TEST-505` (expected) |
+| Faults (uncollapsed) | 16,140 |
+| Detected | 16,014 |
+| ATPG-untestable | 87 |
+| Undetectable | 37 |
 | Not detected | 2 |
-| **Fault coverage** | **99.48 %** |
+| **Test coverage** | **99.45 %** |
+
+The same flow was repeated in `System_pnr/DFT` on `SYS_TOP_dft_pnr.v` to produce the netlist that goes into place and route: 4 chains of 91/90/90/90 cells, 16,124 faults, **99.48 %** coverage, area 22,024.29, 1,834 cells (364 sequential). That run also writes the SDC files for the three analysis modes (`SYS_TOP_func.sdc`, `SYS_TOP_scan.sdc`, `SYS_TOP_capture.sdc`), the SDF and the SVF.
 
 <p align="center">
-  <img src="docs/images/generated/chart_dft.png" alt="Fault coverage and scan-chain lengths" width="950">
+  <img src="docs/images/generated/chart_dft.png" alt="Test coverage and scan-chain lengths" width="950">
   <br><sub><b>ATPG fault statistics and scan-chain balance</b></sub>
 </p>
 
-**Post-DFT quality of results**
+**Post-DFT quality of results (`Backend/DFT`)**
 
 | Metric | Post-synthesis | Post-DFT | Change |
 |---|---|---|---|
-| Area | 19,918.00 | 21,876.03 | +9.83 % |
-| Power | 0.227 mW | 0.387 mW | about +70 % |
-| Worst setup | – | 13.02 ns (`SE` → scan flop on `SCAN_CLK`); ALU path 18.87 ns | all met |
+| Area | 19,918.00 | 22,024.29 | +10.57 % |
+| Cells | 1,945 | 1,845 | −100 |
+| Power | 0.227 mW | 0.385 mW | about +70 % |
+| Worst setup | – | 13.01 ns (`SE` → `RAM_reg[0][3]` on `SCAN_CLK`); ALU path 18.87 ns | all met |
 | Hold | – | 0.32 / 0.46 ns | all met |
 
 <p align="center">
@@ -655,14 +670,12 @@ Style: multiplexed-flip-flop scan, no clock mixing. Script commands include `set
   <br><sub><b>Area and power: post-synthesis vs post-DFT</b></sub>
 </p>
 
-Post-DFT cell mix: 272 `SDFFRQX1M`, 64 `SDFFX1M`, 10 `DFFRQX1M`, 4 `SDFFRQX2M`, 2 `SDFFSQX2M`, 1 `SDFFSQX1M`, 1 `DFFRQX2M`, 1 `TLATNCAX12M` (clock gate).
+Post-DFT cell mix: 279 `SDFFRQX1M`, 64 `SDFFQX1M`, 10 `DFFRQX1M`, 4 `SDFFRQX2M`, 2 `SDFFSQX2M`, 1 `SDFFSQX1M`, 1 `DFFRQX2M` and 1 `TLATNX1M` (the clock-gate latch; the synthesis netlist instead uses the integrated `TLATNCAX12M` cell).
 
 <p align="center">
   <img src="docs/images/generated/chart_cell_mix.png" alt="Sequential cell mix after scan insertion" width="760">
   <br><sub><b>Sequential cells after scan insertion</b></sub>
 </p>
-
-An older run (`Backend/DFT/dft.log`) used 3 chains of 99/99/98 cells; the final run is `Backend/DFT/log/dft.log`.
 
 ### 14.3 Formal equivalence (`Backend/Formality`)
 
@@ -671,17 +684,16 @@ Tool: Synopsys Formality L-2016.03-SP1.
 | Comparison | Passing points | Failing | Aborted | Unverified |
 |---|---|---|---|---|
 | RTL vs post-synthesis | 358 (3 ports, 354 DFF, 1 latch `U_CLK_GATE/U0_TLATNCAX12M`) | 0 | 0 | 0 |
-| RTL vs post-DFT | 358 | 0 | 0 | 0 |
+| RTL vs post-DFT | 365 (3 ports, 361 DFF, 1 latch) | 0 | 0 | 0 |
 
 Run time of about 137 s for the post-synthesis comparison. Post-DFT notes:
 
 - `test_mode = 0` and `SE = 0` are applied as constants during the compare.
-- `SI` / `SO` ports are excluded with `set_dont_verify_points` (3 don't-verify ports `SO[2:0]`).
-- The 4(1) unmatched/unread points relate to the extra scan-in port `test_si4`.
-- The FM-036 messages about the SI/SO name patterns are non-fatal.
+- The scan ports are excluded with `set_dont_verify_points` using the patterns `SI[*]` and `SO[*]` (all eight scan ports, reference and implementation).
+- 0 unmatched compare points; 6 unmatched *unread* points on the reference side.
 - `FMR_ELAB-147` warning: `Serializer` indexes `pDataReg[counter]` with a 4-bit counter into an 8-entry vector (see [section 16](#16-known-limitations-and-notes)).
 
-`Backend/Formality/post-PnR` contains only an unpopulated script template (no layout stage has been run).
+`Backend/Formality/post-PnR` still contains only the script template: the reader and compare sections are blank, so the routed netlist has not been formally compared against the RTL.
 
 ### 14.4 SpyGlass lint and CDC (`Results/Spyglass_Results`)
 
@@ -712,6 +724,86 @@ The crossing classification is plotted in [section 12](#12-clock-domain-crossing
 | Reset initialization | 82.56 % (64 unknown flops – consistent with the un-reset 8×8 FIFO memory) |
 
 Rules involved include `Ac_sync01/02`, `Ac_unsync01/02`, `Ac_conv01`, `Ac_cdc01a`, `Ac_datahold01a`, `Setup_port01`, `Clock_glitch04`, `InferLatch`, `Ar_sync01`, `Ar_syncdeassert01`.
+
+### 14.5 Place and route (`System_pnr/pnr`, `PnR/`)
+
+Tool: Cadence First Encounter 08.10-p004_1. The input is the scan-inserted netlist from `System_pnr/DFT` and its SDC, with the TSMC 0.13 µm library (`scmetro_tsmc_cl013g_rvt`, 7-metal tech LEF). The flow is split into one Tcl script per step:
+
+<p align="center">
+  <img src="docs/images/generated/pnr_flow.svg" alt="Place and route flow with results per step" width="1000">
+  <br><sub><b>Place-and-route steps and results</b></sub>
+</p>
+
+**Setup**
+
+| Item | Value |
+|---|---|
+| Analysis modes | `func_mode` (`test_mode = 0`, `SE = 0`), `scan_mode` (`test_mode = 1`, `SE = 1`), `capture_mode` (`test_mode = 1`, `SE = 0`) |
+| Corners | max = ss 1.08 V 125 °C, min = ff 1.32 V −40 °C; one RC corner (`tsmc13fsg.capTbl`) |
+| Analysis views | setup and hold for each of the three modes (6 views) |
+| Die size | 240.47 × 160.47 µm with 6 µm margins on every side |
+| Power grid | `VDD` / `VSS` rings and `METAL6` stripes (1 µm wide, 60 µm set-to-set) |
+| Placement | `placeDesign -inPlaceOpt -prePlaceOpt`, tie-hi / tie-lo cells added |
+| Clock tree | `clockDesign` with one tree each for `scan_clk` (root pin), `UART_CLK` and `REF_CLK` |
+| Routing | NanoRoute, global + detail with via / wire optimization and an ECO refine pass (`refinePlace -preserveRouting`) |
+| Finish | 2,072 filler cells (`FILL1M` … `FILL64M`) |
+| Exports | netlist (with and without PG pins), SPF, SDF, GDS (≈ 199 KB), power report |
+
+**Timing (all views, `timeDesign` summaries in `PnR/timingReports/`)**
+
+| Stage | Setup WNS | Hold WNS | Violating paths | Placement density |
+|---|---|---|---|---|
+| Pre-CTS | +0.268 ns | +0.072 ns | 0 | 66.7 % |
+| Post-CTS | +0.352 ns | +0.029 ns | 0 | 72.6 % |
+| Post-route | +0.450 ns | +0.030 ns | 0 | 100 % (filler cells included) |
+
+After routing, setup WNS by path group is: reg2reg +0.450 ns, in2reg +15.559 ns, reg2out +13.147 ns, clock-gating +17.083 ns. There are no max-cap, max-transition or max-fanout violations.
+
+<p align="center">
+  <img src="docs/images/generated/chart_pnr_timing.png" alt="Setup and hold WNS through place and route" width="760">
+  <br><sub><b>Worst slack at each place-and-route stage</b></sub>
+</p>
+
+**Clock trees (`System_pnr/pnr/clock_report/clock.report`)**
+
+| Tree | Buffers | Levels | Skew (setup views) | Skew (hold views) | Target |
+|---|---|---|---|---|---|
+| `scan_clk` | 86 | 19 | 236.5 ps | 96.8 ps | 200 ps |
+| `UART_CLK` | 30 | 15 | 216.5 ps | – | 200 ps |
+| `REF_CLK` | 42 | 11 | 92.7 ps | – | 200 ps |
+
+**Sign-off checks**
+
+| Check | Result |
+|---|---|
+| `verifyGeometry -noMinArea` | No DRC violations found |
+| `verifyConnectivity -type all` | Found no problems or warnings |
+| `verifyProcessAntenna` | No violations found |
+
+**Power** (`report_power`, ss corner, 0.2 activity on primary inputs, no activity file): 0.939 mW total, made of 0.628 mW internal, 0.296 mW switching and 0.016 mW leakage. Sequential cells account for 45.4 % and combinational cells for 54.6 %. This is a different tool and activity assumption from the Design Compiler numbers above, so the two totals should not be compared directly.
+
+<p align="center">
+  <img src="docs/images/generated/chart_pnr_power.png" alt="Post-route power by clock" width="760">
+  <br><sub><b>Post-route power attributed to each clock</b></sub>
+</p>
+
+**Layout**
+
+<p align="center">
+  <img src="Results/Layout/Layout.png" alt="Final routed layout of SYS_TOP" width="760">
+  <br><sub><b>Routed layout of SYS_TOP (Results/Layout/Layout.png)</b></sub>
+</p>
+
+<p align="center">
+  <img src="Results/Layout/ss_images.fplan.gif" alt="Floorplan view" width="420">
+  <img src="Results/Layout/ss_images.place.gif" alt="Placement view" width="420">
+  <br><sub><b>Encounter screenshots: floorplan view with power stripes and placed cell rows (left), routed view (right)</b></sub>
+</p>
+
+<p align="center">
+  <img src="Results/Layout/ss_images.amoeba.gif" alt="Amoeba view" width="420">
+  <br><sub><b>Amoeba (module-placement) view, where the clock-divider modules `U_ClkDiv_TX` and `U_ClkDiv_RX` are labelled</b></sub>
+</p>
 
 ---
 
@@ -756,6 +848,8 @@ cd Backend/DFT
 ./run_dft.sh
 ```
 
+The same script exists in `System_pnr/DFT/` for the run on `SYS_TOP_dft_pnr.v` that feeds place and route.
+
 ### Formality
 
 ```bash
@@ -771,6 +865,23 @@ The `run_*` files create `logs/` and `reports/` and invoke `fm_shell -f <script>
 
 SpyGlass project files are not stored in the repo (the `spyglass/` working directory is git-ignored); only the consolidated reports are provided in `Results/Spyglass_Results/`.
 
+### Place and route
+
+The Encounter project is in `System_pnr/pnr/` and the scripts are meant to be sourced in this order (taken from the file names and the saved `encounter.cmd*` history; the repo has no single driver script):
+
+```tcl
+source des_import.tcl      ;# netlist, LEFs, libraries, MMMC views
+source floorplan.tcl
+# power rings / stripes were added interactively (see encounter.cmd*)
+source placement.tcl
+source cts.tcl
+source routing.tcl
+source chip_finish.tcl
+source outputs_gen.tcl
+```
+
+`des_import.tcl` points at `/home/ahesham/Projects/System_pnr/...`; change those paths (and the `NUM_SCAN_CHAINS` variable, which selects the LEF and floorplan size) before running. The exported results are mirrored in `PnR/`.
+
 ---
 
 ## 16. Known limitations and notes
@@ -783,8 +894,15 @@ SpyGlass project files are not stored in the repo (the `spyglass/` working direc
 - **Serializer index width**: `pDataReg[counter]` uses a 4-bit counter against an 8-bit vector (Formality `FMR_ELAB-147`). The counter never exceeds 7 while transmitting data, so it is benign in practice, but it may be tightened to 3 bits.
 - **Testbench parity**: the TB monitor skips over the parity bit rather than checking it.
 - **Synthesis `.ddc`**: `Backend/Synthesis/netlists/SYS_TOP.ddc` is plain Verilog text, because `syn_script.tcl` writes both files with `-format verilog`. The DFT script writes a real binary `.ddc`.
-- **Post-PnR Formality** is an empty template; no place-and-route stage is included.
-- **Duplicated logs**: `Backend/DFT/dft(1).log` is identical to `log/dft.log`; `dft_fm_log.log` appears in two places under `post-dft`.
+- **Post-PnR Formality** is still an empty template, so the routed netlist has not been compared against the RTL.
+- **Clock-tree skew**: the `scan_clk` (236.5 ps) and `UART_CLK` (216.5 ps) trees exceed the 200 ps skew target in the CTS report, although post-route timing is met.
+- **Two DFT runs**: `Backend/DFT` (on `SYS_TOP_dft.v`) reports 99.45 % coverage and `System_pnr/DFT` (on `SYS_TOP_dft_pnr.v`) reports 99.48 %; the netlist used for place and route is the second one.
+- **Sequential cell count**: the DFT netlist contains 362 sequential instances while the DC area report says 364.
+- **Clock-gate cell**: the synthesis netlist uses the integrated `TLATNCAX12M` cell, while the DFT netlist uses a plain `TLATNX1M` latch, which is the cell DFT flags as not scannable (`TEST-126`).
+- **Hard-coded paths**: `System_pnr/pnr/des_import.tcl` and `MMMC.tcl` use `/home/ahesham/...` and relative `../std_cells` paths.
+- **Working files in the repo**: `System_pnr/DFT/work/`, `alib-52/`, `*.sdc~` backups and several `encounter.log*` / `.enc` snapshots are committed alongside the final results.
+- **Second generator script**: `docs/scripts/make_diagrams.py` (Graphviz-based) writes some of the same file names as `docs/tools/` (for example `uart_frame.svg` and `register_map.svg`); running both will overwrite one set with the other.
+- **Duplicated logs**: `dft_fm_log.log` appears in two places under `Backend/Formality/post-dft`.
 - **SpyGlass `Setup_port01`** flags one of four data ports; the reports do not name it, but it is most likely `RX_IN` (an abstract port without constraint values).
 - The `PULSE_GEN` header comment calls it a "bit synchronizer"; functionally it is an edge/level-to-pulse generator.
 - The clock-gate latch is intentionally inferred (`InferLatch` lint error, DFT `TEST-505`), and both are expected.
@@ -798,11 +916,12 @@ SpyGlass project files are not stored in the repo (the `spyglass/` working direc
 | Simulation | ModelSim |
 | Synthesis & DFT | Synopsys Design Compiler O-2018.06-SP1 |
 | Formal equivalence | Synopsys Formality L-2016.03-SP1 |
+| Place and route | Cadence First Encounter 08.10-p004_1 |
 | Lint & CDC | Synopsys SpyGlass L-2016.06 |
-| Technology | TSMC 0.13 µm standard-cell library (`scmetro_tsmc_cl013g_rvt`, ss/tt/ff corners) |
+| Technology | TSMC 0.13 µm standard-cell library (`scmetro_tsmc_cl013g_rvt`, ss/tt/ff corners), 7-metal tech LEF (`tsmc13fsg_7lm_tech.lef`) |
 
 ---
 
 ## 18. Credits
 
-Design, implementation and verification by **Mohamed Hossam El-Sawy**, under the guidance of **Eng. Ali Temsah**. The full write-up (RTL, simulation, synthesis, DFT, Formality and SpyGlass) is in `Results/SYS_TOP_Project_Report.pdf`, and the system specification is in `Final_System.pdf`.
+Design, implementation and verification by **Mohamed Hossam El-Sawy**, under the guidance of **Eng. Ali Temsah**. The full write-up (RTL, simulation, synthesis, DFT, Formality and SpyGlass; it predates the place-and-route stage and the DFT rerun) is in `Results/SYS_TOP_Project_Report.pdf`, and the system specification is in `Final_System.pdf`.
